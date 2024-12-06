@@ -1,5 +1,7 @@
 import './App.css'
 import { Items } from './components/Items'
+import characterImage from './assets/images/characters/elesis_1.png';
+
 
 export function App() {
   return (
@@ -7,38 +9,39 @@ export function App() {
   <div className="page-layout">
     <div className="character-layout">
       <div className="equipment-left">
-        <img src="/assets/img/equip-clean/helmet.png" alt="Item 1"/>
-        <img src="/assets/img/equip-clean/upper-armor.png" alt="Item 2"/>
-        <img src="/assets/img/equip-clean/lower-armor.png" alt="Item 3"/>
-        <img src="/assets/img/equip-clean/gloves.png" alt="Item 1"/>
-        <img src="/assets/img/equip-clean/shoes.png" alt="Item 2"/>
-        <img src="/assets/img/equip-clean/mantle.png" alt="Item 3"/>
+        <Items name="helmet"/>
+        <Items name="upper-armor"/>
+        <Items name="lower-armor"/>
+        <Items name="gloves"/>
+        <Items name="shoes"/>
+        <Items name="mantle"/>
       </div>
 
       <div className="character-display">
-        <img src="/assets/img/characters/mari_4.png" alt="Character"/>
+        <img src={characterImage} alt="Character"/>
+         {/* <img src="src/assets/images/characters/elesis_1.png" alt="Character" /> */}
       </div>
 
       <div className="equipment-right">
-        <img src="/assets/img/equip-clean/weapon.png" alt="Item 1"/>
-        <img src="/assets/img/equip-clean/upper-head.png" alt="Item 2"/>
-        <img src="/assets/img/equip-clean/lower-head.png" alt="Item 3"/>
-        <img src="/assets/img/equip-clean/upper-back.png" alt="Item 4"/>
-        <img src="/assets/img/equip-clean/lower-back.png" alt="Item 5"/>
-        <img src="/assets/img/equip-clean/arms.png" alt="Item 6"/>
-        <img src="/assets/img/equip-clean/weapon.png" alt="Item 7"/>
-        <img src="/assets/img/equip-clean/ring.png" alt="Item 8"/>
-        <img src="/assets/img/equip-clean/necklace.png" alt="Item 9"/>
-        <img src="/assets/img/equip-clean/bracelet.png" alt="Item 10"/>
-        <img src="/assets/img/equip-clean/earring.png" alt="Item 11"/>
-        <img src="/assets/img/equip-clean/earring.png" alt="Item 12"/>
+        <Items name="weapon"/>
+        <Items name="upper-head"/>
+        <Items name="lower-head"/>
+        <Items name="upper-back"/>
+        <Items name="lower-back"/>
+        <Items name="arms"/>
+        <Items name="weapon"/>
+        <Items name="ring"/>
+        <Items name="necklace"/>
+        <Items name="bracelet"/>
+        <Items name="earring"/>
+        <Items name="earring"/>
       </div>
 
       <div className="status-container">
         <div className="status-column">
           <div className="status-text">
             <p className="ataque-total">Ataque Total</p>
-            <p>TestehellohellohellohelloAtaque</p>
+            <p>Ataque</p>
             <p>Crítico</p>
             <p>Dano Crítico</p>
             <p>Ataque Especial</p>

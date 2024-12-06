@@ -1,8 +1,8 @@
-export function Items() {
+export function Items({name}:{name: string}) {
     const imagePath = (fileName: string) => new URL(`../assets/images/equip-clean/${fileName}`, import.meta.url).href;
     return (
         <>
-        <img src={imagePath('helmet.png')} alt="Helmet"/>
+        <img src={imagePath(`${name}.png`)} alt={name}/>
         </>
     )
 }
