@@ -1,14 +1,18 @@
-import './App.css'
+import styles from './App.module.css'
 import { Items } from './components/Items'
 import characterImage from './assets/images/characters/elesis_1.png';
+import { Container } from './components/Container';
 
+
+
+import './global.css'
 
 export function App() {
   return (
     <>
-  <div className="page-layout">
-    <div className="character-layout">
-      <div className="equipment-left">
+  <div className={styles.pageLayout}>
+    <div className={styles.characterLayout}>
+      <div className={styles.equipmentLeft}>
         <Items name="helmet"/>
         <Items name="upper-armor"/>
         <Items name="lower-armor"/>
@@ -17,12 +21,12 @@ export function App() {
         <Items name="mantle"/>
       </div>
 
-      <div className="character-display">
+      <div className={styles.characterDisplay}>
         <img src={characterImage} alt="Character"/>
          {/* <img src="src/assets/images/characters/elesis_1.png" alt="Character" /> */}
       </div>
 
-      <div className="equipment-right">
+      <div className={styles.equipmentRight}>
         <Items name="weapon"/>
         <Items name="upper-head"/>
         <Items name="lower-head"/>
@@ -37,10 +41,10 @@ export function App() {
         <Items name="earring"/>
       </div>
 
-      <div className="status-container">
-        <div className="status-column">
-          <div className="status-text">
-            <p className="ataque-total">Ataque Total</p>
+      <div className={styles.statusContainer}>
+        <div className={styles.statusColumn}>
+          <div className={styles.statusText}>
+            <p className={styles.ataqueTotal}>Ataque Total</p>
             <p>Ataque</p>
             <p>Crítico</p>
             <p>Dano Crítico</p>
@@ -50,8 +54,8 @@ export function App() {
             <p>Lança Infernal</p>
             <p>Resistência a Contaminação</p>
           </div>
-          <div className="status-numbers">
-            <p className="ataque-total">503341</p>
+          <div className={styles.statusNumbers}>
+            <p className={styles.ataqueTotal}>503341</p>
             <p>29541</p>
             <p>73.11%</p>
             <p>697.69%</p>
@@ -62,8 +66,8 @@ export function App() {
             <p>22.76%</p>
           </div>
         </div>
-        <div className="status-column">
-          <div className="status-text">
+        <div className={styles.statusColumn}>
+          <div className={styles.statusText}>
             <p>-</p>
             <p>Defesa</p>
             <p>HP</p>
@@ -74,7 +78,7 @@ export function App() {
             <p>EXP</p>
             <p>GP</p>
           </div>
-          <div className="status-numbers">
+          <div className={styles.statusNumbers}>
             <p>-</p>
             <p>12458</p>
             <p>7434</p>
@@ -89,51 +93,51 @@ export function App() {
       </div>
 
 
-       <div className="tabs">
-        <button className="tab-button">Missão</button>
-        <button className="tab-button">PvP</button>
+       <div className={styles.tabs}>
+        <button className={styles.tabButton}>Missão</button>
+        <button className={styles.tabButton}>PvP</button>
       </div>
     </div>
-    <div className="equips-status-description">
-      <div className="column">
+    <div className={styles.equipsStatusDescription}>
+      <div className={styles.column}>
         <h3>Equipamentos</h3>
         <div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
           </div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
           </div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
           </div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
           </div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
             <p>prop</p>
           </div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Armor</p>
             <p>prop</p>
             <p>prop</p>
@@ -142,16 +146,16 @@ export function App() {
           </div>
         </div>
       </div>
-      <div className="column">
+      <div className={styles.column}>
         <h3>Efeito de conjunto</h3>
         <div>
-          <div className="equips-props">
+          <div className={styles.equipsProps}>
             <p>Conjunto</p>
-            <p className="checked-conjunto">Efeito: <span>valor 1234</span></p>
-            <p className="checked-conjunto">Efeito: <span>valor 1234</span></p>
-            <p className="checked-conjunto">Efeito: <span>valor 1234</span></p>
-            <p className="checked-conjunto">Efeito: <span>valor 1234</span></p>
-            <p className="checked-conjunto">Efeito: <span>valor 1234</span></p>
+            <p className={styles.checkedConjunto}>Efeito: <span>valor 1234</span></p>
+            <p className={styles.checkedConjunto}>Efeito: <span>valor 1234</span></p>
+            <p className={styles.checkedConjunto}>Efeito: <span>valor 1234</span></p>
+            <p className={styles.checkedConjunto}>Efeito: <span>valor 1234</span></p>
+            <p className={styles.checkedConjunto}>Efeito: <span>valor 1234</span></p>
             <p>Efeito: <span>valor 1234</span></p>
             <p>Efeito: <span>valor 1234</span></p>
             <p>Efeito: <span>valor 1234</span></p>

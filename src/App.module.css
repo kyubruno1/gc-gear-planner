@@ -1,52 +1,23 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #e0e0e0;
-}
 
-.character-layout,
-.equips-status-description,
-.status-container {
+.characterLayout,
+.equipsStatusDescription,
+.statusContainer {
     border: 3px solid #a1b8ce;
     border-radius: 10px;
     box-shadow: 0 0 1px 3px #415870;
 }
 
-.page-layout {
-    /* display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px; */
-
+.pageLayout {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* Same as before */
     gap: 20px;
     max-width: 1200px;
-    /* Ensure this max width applies to the whole layout */
     margin: 0 auto;
-    /* Center horizontally */
     padding: 20px;
 }
 
-.character-layout {
-    /* display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: auto 1fr auto;
-  gap: 20px;
-  max-width: 1200px;
-  margin: 50px auto;
-  background-color: #b4c3d6;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  justify-items: center;
-  grid-column: span 3; */
-
+.characterLayout {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: auto 1fr auto;
@@ -56,27 +27,22 @@ body {
     border-radius: 12px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     grid-column: span 3;
-    /* Span all columns in the grid */
 }
 
-/* Left Equipment Section */
-
-
-.equipment-left {
+.equipmentLeft {
     justify-content: start;
 }
 
-.equipment-left,
-.equipment-right {
+.equipmentLeft,
+.equipmentRight {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
 }
 
-
-.equipment-left img,
-.equipment-right img {
+.equipmentLeft img,
+.equipmentRight img {
     width: 70px;
     height: 70px;
     border: 2px solid #ccc;
@@ -85,19 +51,19 @@ body {
 }
 
 /* Character Display */
-.character-display {
+.characterDisplay {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.character-display img {
+.characterDisplay img {
     max-width: 100%;
     height: auto;
 }
 
 /* Right Equipment Section with 2 columns */
-.equipment-right {
+.equipmentRight {
     display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(6, 1fr);
@@ -107,7 +73,7 @@ body {
 
 
 /* Bottom Stats Section */
-.status-container {
+.statusContainer {
     grid-column: span 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -116,24 +82,22 @@ body {
 
 }
 
-.status-column {
+.statusColumn {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Two sub-columns within each main column */
     gap: 5px;
-    /* Gap between text and number columns */
 }
 
-.status-numbers {
+.statusNumbers {
     text-align: end;
 }
 
-.status-numbers p {
+.statusNumbers p {
     text-indent: -30px;
 }
 
-.status-numbers,
-.status-text {
+.statusNumbers,
+.statusText {
     background: #4d5d81;
     color: #f4fdff;
     font-weight: bold;
@@ -141,48 +105,40 @@ body {
     border-radius: 10px;
 }
 
-.ataque-total {
+.ataqueTotal {
     color: #eeba49;
 }
 
-.status-column p {
+.statusColumn p {
     padding: 3px;
 }
 
-.status-column p span:first-child {
+.statusColumn p span:first-child {
     text-align: left;
-    /* Align text to the left */
     background: transparent;
-    /* No background for text */
 }
 
-.status-column p span:last-child {
+.statusColumn p span:last-child {
     text-align: right;
-    /* Align numbers to the right */
-    /* Custom background for numbers */
     border-radius: 4px;
-    /* Optional: rounded corners for numbers */
 }
 
 
-/*  COLUMNS 2   */
-.equips-status-description {
+.equipsStatusDescription {
     color: #f4fdff;
     font-weight: bold;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Two columns layout */
     gap: 20px;
     background-color: #566a8f;
     border-radius: 10px;
     box-shadow: 0 0 1px 3px #415870;
     grid-column: span 3;
-    /* Span all columns in the grid */
     padding: 20px;
 }
 
 .column>h3,
-.equips-props {
+.equipsProps {
     background: #4d5d81;
     border-radius: 10px;
 }
@@ -192,35 +148,26 @@ body {
     text-align: center;
 }
 
-.equips-props {
+.equipsProps {
     margin-top: 10px;
     padding: 10px 0;
 }
 
-.equips-props p {
+.equipsProps p {
     line-height: 1.4;
     padding: 0 10px;
 }
 
-.equips-props p:first-child {
+.equipsProps p:first-child {
     margin-bottom: 5px;
     border-bottom: 1px solid #a1b8ce;
     padding-bottom: 10px;
 }
 
-.checked-conjunto {
+.checkedConjunto {
     color: #eeba49
 }
 
-
-
-
-
-
-
-
-
-/* Tabs for Missão and PvP */
 .tabs {
     grid-column: span 3;
     display: flex;
@@ -229,7 +176,7 @@ body {
     padding: 10px 20px;
 }
 
-.tab-button {
+.tabButton {
     background-color: #007bff;
     color: white;
     border: none;
@@ -238,19 +185,18 @@ body {
     cursor: pointer;
 }
 
-.tab-button:hover {
+.tabButton:hover {
     background-color: #0056b3;
 }
 
-/* Responsive Design */
 @media screen and (max-width: 768px) {
-    .character-layout {
+    .characterLayout {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto auto;
         gap: 10px;
     }
 
-    .status-info {
+    .statusInfo {
         flex-direction: column;
     }
 
@@ -258,18 +204,18 @@ body {
         width: 100%;
     }
 
-    .equipment-left,
-    .equipment-right {
+    .equipmentLeft,
+    .equipmentRight {
         flex-direction: row;
         justify-content: space-evenly;
         gap: 5px;
     }
 
-    .equipment-right {
+    .equipmentRight {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .character-display img {
+    .characterDisplay img {
         width: 150px;
         height: auto;
     }
