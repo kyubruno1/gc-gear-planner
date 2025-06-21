@@ -1,0 +1,47 @@
+.equipsStatusDescription {
+  border: 3px solid #a1b8ce;
+  border-radius: 10px;
+  box-shadow: 0 0 1px 3px #415870;
+
+  color: #f4fdff;
+  font-weight: bold;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #566a8f;
+  border-radius: 10px;
+  box-shadow: 0 0 1px 3px #415870;
+  grid-column: span 3;
+  padding: 20px;
+}
+
+.column>h3,
+.equipsProps {
+    background: #4d5d81;
+    border-radius: 10px;
+}
+
+.column>h3 {
+  padding: 10px;
+  text-align: center;
+}
+
+.equipsProps {
+  margin-top: 10px;
+  padding: 10px 0;
+}
+
+.equipsProps p {
+  line-height: 1.4;
+  padding: 0 10px;
+}
+
+.equipsProps p:first-child {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #a1b8ce;
+  padding-bottom: 10px;
+}
+
+.checkedConjunto {
+  color: #eeba49
+}
