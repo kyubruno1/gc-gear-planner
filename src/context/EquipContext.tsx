@@ -7,6 +7,16 @@ export interface EquippedItem extends CharacterStatus {
   type: string;
   img: string;
   bonusType: string;
+  equipType?: string;
+  grade: string;
+  cards?: Card[];
+}
+
+export interface Card {
+  name: string;
+  img: string;
+  // você pode colocar stats da carta aqui, se quiser somar depois
+  [key: string]: any;
 }
 
 export interface EquippedItems {
@@ -24,6 +34,9 @@ interface EquipContextType {
   countAllBonusTypes: () => Record<string, number>;
   calculateBonusExtras: () => Partial<CharacterStatus>;
   flattenBonusExtras: (bonusesByType: Record<string, Partial<CharacterStatus>>) => Partial<CharacterStatus>;
+  equipCards: (slot: string, cards: Card[]) => void;
+  removeCardsFromSlot: (slot: string) => void;
+
 }
 
 const EquipContext = createContext<EquipContextType | undefined>(undefined);
@@ -117,6 +130,37 @@ export function EquipProvider({ children }: { children: ReactNode }) {
     return flatBonus;
   }
 
+  function equipCards(slot: string, cards: Card[]) {
+    setEquipped(prev => {
+      const item = prev[slot];
+      if (!item) return prev; // não tem equipamento no slot
+
+      return {
+        ...prev,
+        [slot]: {
+          ...item,
+          cards,
+        },
+      };
+    });
+  }
+
+  function removeCardsFromSlot(slot: string) {
+    setEquipped(prev => {
+      const item = prev[slot];
+      if (!item) return prev;
+
+      const updatedItem = { ...item };
+      delete updatedItem.cards;
+
+      return {
+        ...prev,
+        [slot]: updatedItem,
+      };
+    });
+  }
+
+
   return (
     <EquipContext.Provider value={{
       equipped,
@@ -126,7 +170,9 @@ export function EquipProvider({ children }: { children: ReactNode }) {
       countBonusType,
       countAllBonusTypes,
       calculateBonusExtras,
-      flattenBonusExtras
+      flattenBonusExtras,
+      equipCards,
+      removeCardsFromSlot
     }}>
       {children}
     </EquipContext.Provider>

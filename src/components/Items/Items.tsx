@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CharacterStatus, useAtkTotal } from "../../context/AtkTotalContext";
 import { useEquip } from "../../context/EquipContext";
+import { CardModal } from "../CardModal/CardModal";
 import { EquipmentModal } from "../EquipmentModal/EquipmentModal";
 interface ItemProps {
   name: string;
@@ -13,13 +14,18 @@ export function Items({ name }: ItemProps) {
   const equippedItem = equipped[name]; // name = tipo ("helmet", "ring"...)
 
   // Controla a abertura do container (modal) para escolher item
-  const [activeType, setActiveType] = useState<string | null>(null);
+  const [itemModal, setItemModal] = useState<string | null>(null);
+  const [cardModal, setCardModal] = useState<string | null>(null);
 
+  if (equippedItem) {
+    console.log(equippedItem)
+
+  }
   // Função chamada ao selecionar um item no container
   function handleSelectItem(item: CharacterStatus & { name: string; type: string; img: string }) {
     equipItem(item); // atualiza contexto
     addSource(item.name, item); // atualiza contexto
-    setActiveType(null); // fecha o container/modal
+    setItemModal(null); // fecha o container/modal
   }
 
   // Caminho para imagem: se tiver item equipado, mostra a imagem dele, senão a padrão
@@ -39,7 +45,7 @@ export function Items({ name }: ItemProps) {
         <button
           type="button"
           className="border-none p-0 cursor-pointer"
-          onClick={() => setActiveType(name)}
+          onClick={() => setItemModal(name)}
         >
           <img
             src={equippedItem ? equippedItem.img : imagePath(`${name}.png`)}
@@ -50,20 +56,49 @@ export function Items({ name }: ItemProps) {
 
         {hovering && equippedItem && (
           <div className="absolute top-0 left-16 ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10">
-            <button onClick={() => setActiveType(name)} className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs">Encaixe</button>
-            <button onClick={() => setActiveType(name)} className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-purple-500 hover:bg-purple-400 text-xs">Prop.</button>
-            <button onClick={() => unequipItem(name)} className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-red-400 hover:bg-red-600 text-xs">Remover</button>
+            {equippedItem.equipType === 'armor_set' && (
+              <button
+                onClick={() => setCardModal(name)}
+                className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs"
+              >
+                Encaixe
+              </button>
+            )}
+
+            <button
+              onClick={() => setItemModal(name)}
+              className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-purple-500 hover:bg-purple-400 text-xs"
+            >
+              Prop.
+            </button>
+
+            <button
+              onClick={() => unequipItem(name)}
+              className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-red-400 hover:bg-red-600 text-xs"
+            >
+              Remover
+            </button>
           </div>
         )}
+
       </div>
 
-      {activeType && (
+      {itemModal && (
         <EquipmentModal
-          type={activeType}
+          type={itemModal}
           onSelectItem={handleSelectItem}
-          onClose={() => setActiveType(null)}
+          onClose={() => setItemModal(null)}
         />
       )}
+
+      {cardModal && (
+        <CardModal
+          onClose={() => setCardModal(null)}
+          rarity={equippedItem.grade || "rare"}
+          slotName={equippedItem.type}
+        />
+      )}
+
     </>
   );
 }

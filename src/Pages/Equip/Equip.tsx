@@ -4,6 +4,7 @@ import { Items } from '../../components/Items/Items';
 import { PageContainer } from '../../components/Page-container/Page-container';
 import { Status } from '../../components/Status/Status';
 import { useEquip } from '../../context/EquipContext';
+import { EquipOverview } from '../../EquipOverview';
 import '../../global.css';
 
 export function Equip() {
@@ -56,6 +57,8 @@ export function Equip() {
           </ul>
         </div>
         <div />
+
+        <EquipOverview />
       </PageContainer>
     </>
   )

@@ -4,6 +4,7 @@
     "type": "helmet",
     "bonusType": "berkas_epic",
     "equipType": "armor_set",
+    "grade": "epic",
     "img": "public/assets/images/equip/berkas/berkas_legendary_helmet.png",
     "total_attack": 0,
     "attack": 150,
