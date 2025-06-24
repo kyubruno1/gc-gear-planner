@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CharacterStatus, useAtkTotal } from "../context/AtkTotalContext";
-import { Container } from "./container/Container";
+import { Container } from "./Container/Container";
 
 interface ItemProps {
   name: string; // tipo do equipamento, ex: 'helmet', 'gloves'
@@ -37,7 +37,7 @@ export function Items({ name }: ItemProps) {
         <img
           src={equippedItem ? equippedItem?.img : imagePath(`${name}.png`)}
           alt={equippedItem ? equippedItem.name : name}
-          style={{ width: 64, height: 64 }}
+          style={{ width: 95, height: 95 }}
         />
       </button>
 
