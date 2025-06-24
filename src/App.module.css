@@ -2,38 +2,9 @@ body {
     background: #424242;
 }
 
-/* .equipsStatusDescription, */
-/* .statusContainer, */
-/* .characterLayout {
-    border: 3px solid #a1b8ce;
-    border-radius: 10px;
-    box-shadow: 0 0 1px 3px #415870;
-} */
-
-/* .pageLayout {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-} */
-
-/* .characterLayout {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: 20px;
-    background-color: #b4c3d6;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    grid-column: span 3;
-} */
-
-.equipmentLeft {
+/* .equipmentLeft {
     justify-content: start;
-}
+} */
 
 .equipmentLeft,
 .equipmentRight {
@@ -47,50 +18,50 @@ body {
 
 .equipmentLeft button, 
 .equipmentRight button {
-    background: none; 
+    /* background: none; 
     border: none; 
     padding: 0; 
-    cursor: pointer;
+    cursor: pointer; */
 }
 
 .equipmentLeft img,
 .equipmentRight img {
-    width: 70px;
+    /* width: 70px;
     height: 70px;
     border: 2px solid #ccc;
     border-radius: 8px;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; */
 }
 
 /* Character Display */
 .characterDisplay {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 }
 
 .characterDisplay img {
-    max-width: 100%;
-    height: auto;
+    /* max-width: 100%;
+    height: auto; */
 }
 
 /* Right Equipment Section with 2 columns */
 .equipmentRight {
-    display: grid;
+    /* display: grid;
     grid-auto-flow: column;
     grid-template-rows: repeat(6, 1fr);
     grid-gap: 10px;
-    justify-content: end;
+    justify-content: end; */
 }
 
 
 /* Bottom Stats Section */
 .statusContainer {
-    grid-column: span 3;
+    /* grid-column: span 3;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    background: #566a8f;
+    background: #566a8f; */
 
 }
 
@@ -180,13 +151,13 @@ body {
     color: #eeba49
 }
 
-.tabs {
+/* .tabs {
     grid-column: span 3;
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     padding: 10px 20px;
-}
+} */
 
 .tabButton {
     background-color: #007bff;
