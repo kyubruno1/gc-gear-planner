@@ -20,6 +20,16 @@ export interface CharacterStatus {
   gp: number; // %
 }
 
+interface AtkTotalContextType {
+  atkTotal: number;
+  characterStatus: CharacterStatus | null;
+  // updateStatus: (status: CharacterStatus) => void; //remover depois?
+  addSource: (id: string, status: CharacterStatus) => void;
+  removeSource: (id: string) => void;
+  clearSources: () => void;
+}
+
+
 // Função para calcular ATK_Total
 function calculateAtkTotal(character: CharacterStatus): number {
   const {
@@ -41,29 +51,122 @@ function calculateAtkTotal(character: CharacterStatus): number {
   );
 }
 
-interface AtkTotalContextType {
-  atkTotal: number;
-  characterStatus: CharacterStatus | null;
-  updateStatus: (status: CharacterStatus) => void;
-}
+// const statusBase: CharacterStatus = {
+//   total_attack: 0, // pode deixar 0, será recalculado
+//   attack: 1000,
+//   crit_chance: 10,
+//   crit_damage: 50,
+//   sp_attack: 500,
+//   mp_rec: 30,
+//   hell_spear_chance: 5,
+//   hell_spear: 80,
+//   taint_resistance: 10,
+//   defense: 800,
+//   hp: 5000,
+//   crit_resistance: 10,
+//   sp_def: 400,
+//   hp_rec: 10,
+//   counter_attack_resistance: 5,
+//   exp: 0,
+//   gp: 0,
+// };
 
 const AtkTotalContext = createContext<AtkTotalContextType | undefined>(undefined);
 
 export function AtkTotalProvider({ children }: { children: ReactNode }) {
-  const [characterStatus, setCharacterStatus] = useState<CharacterStatus | null>(
-    null
-  );
-  const [atkTotal, setAtkTotal] = useState(0);
+  const statusBase: CharacterStatus = {
+    total_attack: 0,
+    attack: 1000,
+    crit_chance: 10,
+    crit_damage: 50,
+    sp_attack: 500,
+    mp_rec: 30,
+    hell_spear_chance: 5,
+    hell_spear: 80,
+    taint_resistance: 10,
+    defense: 800,
+    hp: 5000,
+    crit_resistance: 10,
+    sp_def: 400,
+    hp_rec: 10,
+    counter_attack_resistance: 5,
+    exp: 0,
+    gp: 0,
+  };
 
-  function updateStatus(status: CharacterStatus) {
-    setCharacterStatus(status);
-    const newAtkTotal = calculateAtkTotal(status);
-    setAtkTotal(newAtkTotal);
+  const initialSources: Record<string, CharacterStatus> = {
+    base: statusBase,
+  };
+
+  const [sources, setSources] = useState(initialSources);
+  const summedStatus = sumSources(initialSources); // chamamos fora do useState
+  const [characterStatus, setCharacterStatus] = useState<CharacterStatus>(summedStatus);
+  const [atkTotal, setAtkTotal] = useState<number>(calculateAtkTotal(summedStatus));
+
+
+
+
+  function sumSources(sources: Record<string, CharacterStatus>): CharacterStatus {
+    const empty: CharacterStatus = {
+      total_attack: 0,
+      attack: 0,
+      crit_chance: 0,
+      crit_damage: 0,
+      sp_attack: 0,
+      mp_rec: 0,
+      hell_spear_chance: 0,
+      hell_spear: 0,
+      taint_resistance: 0,
+      defense: 0,
+      hp: 0,
+      crit_resistance: 0,
+      sp_def: 0,
+      hp_rec: 0,
+      counter_attack_resistance: 0,
+      exp: 0,
+      gp: 0,
+    };
+
+    return Object.values(sources).reduce((acc, cur) => {
+      for (const key in acc) {
+        acc[key as keyof CharacterStatus] += cur[key as keyof CharacterStatus];
+      }
+      return acc;
+    }, empty);
   }
 
+  function addSource(id: string, status: CharacterStatus) {
+    setSources((prev) => {
+      const updated = { ...prev, [id]: status };
+      const summed = sumSources(updated)
+      setCharacterStatus(summed);
+      setAtkTotal(calculateAtkTotal(summed));
+      return updated
+    })
+  }
+
+  function removeSource(id: string) {
+    if (id === 'base') return;
+
+    setSources((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      const summed = sumSources(updated);
+      setCharacterStatus(summed);
+      setAtkTotal(calculateAtkTotal(summed));
+      return updated;
+    });
+  }
+
+  function clearSources() {
+    setSources({})
+    setCharacterStatus(statusBase)
+    setAtkTotal(0)
+  }
   return (
     <AtkTotalContext.Provider
-      value={{ atkTotal, characterStatus, updateStatus }}
+      value={{ atkTotal, characterStatus, addSource, removeSource, clearSources }}
+
     >
       {children}
     </AtkTotalContext.Provider>

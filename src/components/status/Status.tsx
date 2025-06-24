@@ -1,4 +1,4 @@
-import { CharacterStatus } from '../../context/AtkTotalContext'
+import { CharacterStatus, useAtkTotal } from '../../context/AtkTotalContext'
 import styles from './Status.module.css'
 
 interface StatusProps {
@@ -6,12 +6,21 @@ interface StatusProps {
   totalAtk: number,
 }
 
-export function Status({ characterStatus, totalAtk }: StatusProps) {
+
+
+export function Status() {
+
+  const { atkTotal, characterStatus } = useAtkTotal()
+
   return (
     <div className={styles.statusContainer}>
+      <p className={`${styles.statusText} ${styles.totalAtk1} `}>
+        <span>Ataque Total</span>
+        <span>{atkTotal.toFixed(0)}</span>
+      </p>
       <div className={styles.statusColumn}>
         <div className={styles.statusText}>
-          <p className={styles.ataqueTotal}>Ataque Total</p>
+          {/* <p className={styles.totalAtk}>Ataque Total</p> */}
           <p>Ataque</p>
           <p>Crítico</p>
           <p>Dano Crítico</p>
@@ -22,7 +31,7 @@ export function Status({ characterStatus, totalAtk }: StatusProps) {
           <p>Resistência a Contaminação</p>
         </div>
         <div className={styles.statusText}>
-          <p className={styles.totalAtk}>{totalAtk.toFixed(0)}</p>
+          {/* <p className={styles.totalAtk}>{totalAtk.toFixed(0)}</p> */}
           <p>{characterStatus.attack}</p>
           <p>{characterStatus.crit_chance}</p>
           <p>{characterStatus.crit_damage}</p>
@@ -35,7 +44,7 @@ export function Status({ characterStatus, totalAtk }: StatusProps) {
       </div>
       <div className={styles.statusColumn}>
         <div className={styles.statusText}>
-          <p>-</p>
+          {/* <p>-</p> */}
           <p>Defesa</p>
           <p>HP</p>
           <p>Resistência a Dano Crítico</p>
@@ -46,7 +55,7 @@ export function Status({ characterStatus, totalAtk }: StatusProps) {
           <p>GP</p>
         </div>
         <div className={styles.statusText}>
-          <p>-</p>
+          {/* <p>-</p> */}
           <p>{characterStatus.defense}</p>
           <p>{characterStatus.hp}</p>
           <p>{characterStatus.crit_resistance}</p>
