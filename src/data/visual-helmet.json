@@ -1,7 +1,7 @@
 [
   {
     "name": "mock",
-    "type": "necklace",
+    "type": "visual-helmet",
     "img": "src/assets/images/titles/apocalipse.png",
     "total_attack": 0,
     "attack": 150,

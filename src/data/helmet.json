@@ -1,7 +1,10 @@
 [
   {
     "name": "berkas_epic_helmet",
-    "img": "src/assets/images/titles/apocalipse.png",
+    "type": "helmet",
+    "bonusType": "berkas_epic",
+    "equipType": "armor_set",
+    "img": "public/assets/images/equip/berkas/berkas_legendary_helmet.png",
     "total_attack": 0,
     "attack": 150,
     "crit_chance": 5,
@@ -22,6 +25,9 @@
   },
   {
     "name": "berkas_legendary_helmet",
+    "type": "helmet",
+    "bonusType": "berkas_legendary",
+    "equipType": "armor_set",
     "img": "src/assets/images/system/Inv_lendario.png",
     "total_attack": 0,
     "attack": 1500000,

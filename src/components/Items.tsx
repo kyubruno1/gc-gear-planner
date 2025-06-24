@@ -1,31 +1,31 @@
 import { useState } from "react";
 import { CharacterStatus, useAtkTotal } from "../context/AtkTotalContext";
+import { useEquip } from "../context/EquipContext";
 import { Container } from "./Container/Container";
 
 interface ItemProps {
   name: string; // tipo do equipamento, ex: 'helmet', 'gloves'
-
 }
 
 export function Items({ name }: ItemProps) {
   const { addSource } = useAtkTotal();
 
-  // Guarda o item equipado para mostrar a imagem correta
-  const [equippedItem, setEquippedItem] = useState<CharacterStatus & { name: string; img?: string } | null>(null);
+  const { equipped, equipItem } = useEquip();
+  const equippedItem = equipped[name]; // name = tipo ("helmet", "ring"...)
 
   // Controla a abertura do container (modal) para escolher item
   const [activeType, setActiveType] = useState<string | null>(null);
 
   // Função chamada ao selecionar um item no container
-  function handleSelectItem(item: CharacterStatus & { name: string }) {
+  function handleSelectItem(item: CharacterStatus & { name: string; type: string; img: string }) {
+    equipItem(item); // atualiza contexto
     addSource(item.name, item); // atualiza contexto
-    setEquippedItem(item);      // guarda o item selecionado localmente para mostrar imagem
-    setActiveType(null);        // fecha o container/modal
+    setActiveType(null); // fecha o container/modal
   }
 
   // Caminho para imagem: se tiver item equipado, mostra a imagem dele, senão a padrão
   const imagePath = (fileName: string) =>
-    new URL(`../assets/images/equip-clean/${fileName}`, import.meta.url).href;
+    new URL(`../../public/assets/images/equip-clean/${fileName}`, import.meta.url).href;
 
   return (
     <>

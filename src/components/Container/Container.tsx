@@ -84,8 +84,7 @@ export function Container({ type, onSelectItem, onClose }: ContainerProps) {
                 borderRadius: '4px',
                 padding: '5px',
                 cursor: 'pointer',
-              }}
-              onClick={() => onSelectItem(item)}
+              }} onClick={() => onSelectItem(item)}
             >
               <img
                 src={item.img}

@@ -1,7 +1,10 @@
 [
   {
-    "name": "mock",
-    "img": "src/assets/images/titles/apocalipse.png",
+    "name": "berkas_epic_shoes",
+    "type": "shoes",
+    "bonusType": "berkas_epic",
+    "equipType": "armor_set",
+    "img": "public/assets/images/equip/berkas/berkas_legendary_shoes.png",
     "total_attack": 0,
     "attack": 150,
     "crit_chance": 5,

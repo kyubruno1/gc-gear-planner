@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router';
 import { AtkTotalProvider } from './context/AtkTotalContext';
+import { EquipProvider } from './context/EquipContext';
 import './global.css';
 import { Router } from './Router';
 
@@ -8,9 +9,11 @@ import { Router } from './Router';
 export function App() {
   return (
     <BrowserRouter>
-      <AtkTotalProvider>
-        <Router />
-      </AtkTotalProvider>
+      <EquipProvider>
+        <AtkTotalProvider>
+          <Router />
+        </AtkTotalProvider>
+      </EquipProvider>
     </BrowserRouter>
   )
 }

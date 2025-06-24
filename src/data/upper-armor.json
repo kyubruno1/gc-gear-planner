@@ -1,7 +1,10 @@
 [
   {
-    "name": "berkas_epic_chest",
-    "img": "src/assets/images/titles/aquele-que-chegou-em-um-novo-mundo.png",
+    "name": "berkas_epic_upper_armor",
+    "type": "upper-armor",
+    "bonusType": "berkas_epic",
+    "equipType": "armor_set",
+    "img": "public/assets/images/equip/berkas/berkas_legendary_upper_armor.png",
     "total_attack": 0,
     "attack": 150,
     "crit_chance": 5,
@@ -19,26 +22,6 @@
     "counter_attack_resistance": 0,
     "exp": 0,
     "gp": 0
-  },
-  {
-    "name": "berkas_legendary_chest",
-    "img": "src/assets/images/character/ai.png",
-    "total_attack": 0,
-    "attack": 1500000,
-    "crit_chance": 5,
-    "crit_damage": 25,
-    "sp_attack": 50,
-    "mp_rec": 0,
-    "hell_spear_chance": 0,
-    "hell_spear": 0,
-    "taint_resistance": 0,
-    "defense": 0,
-    "hp": 0,
-    "crit_resistance": 0,
-    "sp_def": 0,
-    "hp_rec": 0,
-    "counter_attack_resistance": 0,
-    "exp": 0,
-    "gp": 0
   }
+  
 ]
