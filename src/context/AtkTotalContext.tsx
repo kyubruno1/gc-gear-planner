@@ -10,39 +10,37 @@ import { useEquip } from "./EquipContext";
 export interface CharacterStatus {
   total_attack: number;
   attack: number;
-  crit_chance: number; // %
-  crit_damage: number; // %
+  crit_chance: number;
+  crit_damage: number;
   sp_attack: number;
-  mp_rec: number; // %
-  hell_spear_chance: number; // %
+  mp_rec: number;
+  hell_spear_chance: number;
   hell_spear: number;
-  taint_resistance: number; // %
+  taint_resistance: number;
   defense: number;
   hp: number;
-  crit_resistance: number; // %
+  crit_resistance: number;
   sp_def: number;
-  hp_rec: number; // %
-  counter_attack_resistance: number; // %
-  exp: number; // %
-  gp: number; // %
+  hp_rec: number;
+  counter_attack_resistance: number;
+  exp: number;
+  gp: number;
 }
 
 interface AtkTotalContextType {
   atkTotal: number;
   characterStatus: CharacterStatus | null;
-  addSource: (id: string, status: CharacterStatus) => void;
+  addSource: (id: string, status: Partial<CharacterStatus>) => void;
   removeSource: (id: string) => void;
   clearSources: () => void;
 }
 
-const AtkTotalContext = createContext<AtkTotalContextType | undefined>(
-  undefined
-);
+const AtkTotalContext = createContext<AtkTotalContextType | undefined>(undefined);
 
 export function AtkTotalProvider({ children }: { children: ReactNode }) {
   const { equipped, calculateBonusExtras, flattenBonusExtras } = useEquip();
 
-  //STATUS BASE DO PERSONAGEM
+  // Status base inicial
   const statusBase: CharacterStatus = {
     total_attack: 0,
     attack: 1000,
@@ -63,19 +61,39 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     gp: 0,
   };
 
-  const initialSources: Record<string, CharacterStatus> = {
+  // Agora as fontes podem ser parciais (ex: props com só algumas stats)
+  const [sources, setSources] = useState<Record<string, Partial<CharacterStatus>>>({
     base: statusBase,
-  };
+  });
+  const [characterStatus, setCharacterStatus] = useState<CharacterStatus>(statusBase);
+  const [atkTotal, setAtkTotal] = useState<number>(calculateAtkTotal(statusBase));
 
-  const [sources, setSources] = useState(initialSources);
-  const [characterStatus, setCharacterStatus] = useState<CharacterStatus>(
-    sumSources(initialSources)
-  );
-  const [atkTotal, setAtkTotal] = useState<number>(
-    calculateAtkTotal(characterStatus)
-  );
+  // Função para garantir que todos os campos existam (mesmo que 0)
+  function normalizeCharacterStatus(partial: Partial<CharacterStatus>): CharacterStatus {
+    const empty: CharacterStatus = {
+      total_attack: 0,
+      attack: 0,
+      crit_chance: 0,
+      crit_damage: 0,
+      sp_attack: 0,
+      mp_rec: 0,
+      hell_spear_chance: 0,
+      hell_spear: 0,
+      taint_resistance: 0,
+      defense: 0,
+      hp: 0,
+      crit_resistance: 0,
+      sp_def: 0,
+      hp_rec: 0,
+      counter_attack_resistance: 0,
+      exp: 0,
+      gp: 0,
+    };
+    return { ...empty, ...partial };
+  }
 
-  function sumSources(sources: Record<string, CharacterStatus>): CharacterStatus {
+  // Soma todas as fontes, normalizando cada uma antes para evitar undefined
+  function sumSources(sources: Record<string, Partial<CharacterStatus>>): CharacterStatus {
     const empty: CharacterStatus = {
       total_attack: 0,
       attack: 0,
@@ -97,13 +115,15 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     };
 
     return Object.values(sources).reduce((acc, cur) => {
+      const norm = normalizeCharacterStatus(cur);
       for (const key in acc) {
-        acc[key as keyof CharacterStatus] += cur[key as keyof CharacterStatus];
+        acc[key as keyof CharacterStatus] += norm[key as keyof CharacterStatus];
       }
       return acc;
     }, empty);
   }
 
+  // Função de cálculo do ataque total (sua fórmula)
   function calculateAtkTotal(character: CharacterStatus): number {
     const {
       attack,
@@ -124,7 +144,8 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  function addSource(id: string, status: CharacterStatus) {
+  // Atualiza/add nova fonte parcial
+  function addSource(id: string, status: Partial<CharacterStatus>) {
     setSources((prev) => {
       const updated = { ...prev, [id]: status };
       const summed = sumSources(updated);
@@ -134,6 +155,7 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  // Remove fonte por id
   function removeSource(id: string) {
     if (id === "base") return;
     setSources((prev) => {
@@ -152,62 +174,58 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     setAtkTotal(calculateAtkTotal(statusBase));
   }
 
-  function normalizeCharacterStatus(partial: Partial<CharacterStatus>): CharacterStatus {
-    const empty: CharacterStatus = {
-      total_attack: 0,
-      attack: 0,
-      crit_chance: 0,
-      crit_damage: 0,
-      sp_attack: 0,
-      mp_rec: 0,
-      hell_spear_chance: 0,
-      hell_spear: 0,
-      taint_resistance: 0,
-      defense: 0,
-      hp: 0,
-      crit_resistance: 0,
-      sp_def: 0,
-      hp_rec: 0,
-      counter_attack_resistance: 0,
-      exp: 0,
-      gp: 0,
-    };
+  // Extrai os status dos equipamentos e cartas, normalizando-os
+  function extractStatusFromEquipments(): Record<string, Partial<CharacterStatus>> {
+    const extracted: Record<string, Partial<CharacterStatus>> = {};
 
-    return { ...empty, ...partial };
-  }
+    for (const slot in equipped) {
+      const item = equipped[slot];
+      extracted[`equip:${slot}`] = normalizeCharacterStatus(item);
 
-
-  // ⬇ Atualiza todos os bônus extras com base nos sets
-  function updateBonusSetsSources() {
-    const bonuses = calculateBonusExtras();
-    const flatBonus = flattenBonusExtras(bonuses);
-
-    setSources((prev) => {
-      // Remove todos os antigos que são bonusSet
-      const updated = Object.fromEntries(
-        Object.entries(prev).filter(([key]) => !key.startsWith("bonusSet:"))
-      );
-
-      // Adiciona os novos bonusSet
-      for (const bonusType in bonuses) {
-        updated["bonusSet:all"] = normalizeCharacterStatus(flatBonus);
+      if (item.cards && item.cards.length > 0) {
+        item.cards.forEach((card, index) => {
+          extracted[`equip:${slot}:card${index}`] = normalizeCharacterStatus(card);
+        });
       }
 
-      const summed = sumSources(updated);
-      setCharacterStatus(summed);
-      setAtkTotal(calculateAtkTotal(summed));
-      return updated;
-    });
+      // Também inclui as props selecionadas do item (que são parciais)
+      if (item.selectedProps) {
+        extracted[`equip:${slot}:props`] = normalizeCharacterStatus(item.selectedProps);
+      }
+    }
+
+    return extracted;
   }
 
-  // Atualiza os bônus quando os equipamentos mudarem
+  // Sempre que os equipamentos mudam, atualiza as fontes e status
   useEffect(() => {
-    updateBonusSetsSources();
+    const bonusSets = calculateBonusExtras();
+    const flatBonus = flattenBonusExtras(bonusSets);
+    const normalizedBonus = normalizeCharacterStatus(flatBonus);
+
+    const sourcesFromEquip = extractStatusFromEquipments();
+
+    const merged: Record<string, Partial<CharacterStatus>> = {
+      base: statusBase,
+      ...sourcesFromEquip,
+      "bonusSet:all": normalizedBonus,
+    };
+
+    setSources(merged);
+    const summed = sumSources(merged);
+    setCharacterStatus(summed);
+    setAtkTotal(calculateAtkTotal(summed));
   }, [equipped]);
 
   return (
     <AtkTotalContext.Provider
-      value={{ atkTotal, characterStatus, addSource, removeSource, clearSources }}
+      value={{
+        atkTotal,
+        characterStatus,
+        addSource,
+        removeSource,
+        clearSources,
+      }}
     >
       {children}
     </AtkTotalContext.Provider>
@@ -216,6 +234,7 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
 
 export function useAtkTotal() {
   const context = useContext(AtkTotalContext);
-  if (!context) throw new Error("useAtkTotal deve ser usado dentro de AtkTotalProvider");
+  if (!context)
+    throw new Error("useAtkTotal deve ser usado dentro de AtkTotalProvider");
   return context;
 }

@@ -9,14 +9,37 @@ export interface EquippedItem extends CharacterStatus {
   bonusType: string;
   equipType?: string;
   grade: string;
+  props: ItemProps;
+  selectedProps?: Partial<ItemProps>;
   cards?: Card[];
 }
 
 export interface Card {
   name: string;
   img: string;
-  // você pode colocar stats da carta aqui, se quiser somar depois
   [key: string]: any;
+}
+
+type ItemPropValue = number | { min: number; max: number };
+
+export interface ItemProps {
+  prop_level?: number;
+  attack?: ItemPropValue;
+  defense?: ItemPropValue;
+  hp?: ItemPropValue;
+  hp_rec?: ItemPropValue;
+  mp_rec?: ItemPropValue;
+  lv_min?: ItemPropValue;
+  gp?: ItemPropValue;
+  sp_attack?: ItemPropValue;
+  sp_def?: ItemPropValue;
+  crit_chance?: ItemPropValue;
+  crit_damage?: ItemPropValue;
+  taint_resistance?: ItemPropValue;
+  back_attack?: ItemPropValue;
+  exp?: ItemPropValue;
+  hell_spear_chance?: ItemPropValue;
+  hell_spear?: ItemPropValue;
 }
 
 export interface EquippedItems {
@@ -36,7 +59,8 @@ interface EquipContextType {
   flattenBonusExtras: (bonusesByType: Record<string, Partial<CharacterStatus>>) => Partial<CharacterStatus>;
   equipCards: (slot: string, cards: Card[]) => void;
   removeCardsFromSlot: (slot: string) => void;
-
+  equipProps: (slot: string, selectedProps: Partial<ItemProps>) => void;
+  extractSelectedPropsBonus: () => Partial<CharacterStatus>;
 }
 
 const EquipContext = createContext<EquipContextType | undefined>(undefined);
@@ -133,7 +157,7 @@ export function EquipProvider({ children }: { children: ReactNode }) {
   function equipCards(slot: string, cards: Card[]) {
     setEquipped(prev => {
       const item = prev[slot];
-      if (!item) return prev; // não tem equipamento no slot
+      if (!item) return prev;
 
       return {
         ...prev,
@@ -160,6 +184,34 @@ export function EquipProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  function equipProps(slot: string, selectedProps: Partial<ItemProps>) {
+    setEquipped((prev) => ({
+      ...prev,
+      [slot]: {
+        ...prev[slot],
+        selectedProps,
+      },
+    }));
+  }
+
+  // Essa função pega o valor numérico dos selectedProps de todos os equipamentos
+  // Somando para cada stat o valor correto (number direto ou o valor selecionado se min/max)
+  function extractSelectedPropsBonus(): Partial<CharacterStatus> {
+    const bonuses: Partial<CharacterStatus> = {};
+
+    Object.values(equipped).forEach(item => {
+      if (!item.selectedProps) return;
+
+      for (const key in item.selectedProps) {
+        const value = item.selectedProps[key];
+        if (typeof value === "number") {
+          bonuses[key as keyof CharacterStatus] = (bonuses[key as keyof CharacterStatus] || 0) + value;
+        }
+      }
+    });
+
+    return bonuses;
+  }
 
   return (
     <EquipContext.Provider value={{
@@ -172,7 +224,9 @@ export function EquipProvider({ children }: { children: ReactNode }) {
       calculateBonusExtras,
       flattenBonusExtras,
       equipCards,
-      removeCardsFromSlot
+      removeCardsFromSlot,
+      equipProps,
+      extractSelectedPropsBonus,
     }}>
       {children}
     </EquipContext.Provider>
