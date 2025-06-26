@@ -1,8 +1,10 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import { StoneData } from "../components/StonesModal/StonesModal";
 import bonusSets from '../data/bonus-set.json';
 import { CharacterStatus } from "./AtkTotalContext";
 
 export interface EquippedItem extends CharacterStatus {
+  stone?: StoneData;
   name: string;
   type: string;
   img: string;
@@ -61,6 +63,8 @@ interface EquipContextType {
   removeCardsFromSlot: (slot: string) => void;
   equipProps: (slot: string, selectedProps: Partial<ItemProps>) => void;
   extractSelectedPropsBonus: () => Partial<CharacterStatus>;
+  equipStone: (slot: string, stone: StoneData) => void;
+  unequipStone: (slot: string) => void;
 }
 
 const EquipContext = createContext<EquipContextType | undefined>(undefined);
@@ -213,6 +217,34 @@ export function EquipProvider({ children }: { children: ReactNode }) {
     return bonuses;
   }
 
+  function equipStone(slot: string, stone: StoneData) {
+    setEquipped(prev => {
+      const item = prev[slot];
+      if (!item) return prev;
+
+      return {
+        ...prev,
+        [slot]: {
+          ...item,
+          stone,  // adiciona a pedra no item equipado
+        },
+      };
+    });
+  }
+
+  function unequipStone(slot: string) {
+    setEquipped(prev => {
+      const item = prev[slot];
+      if (!item) return prev;
+
+      const { stone, ...rest } = item; // remove a pedra
+      return {
+        ...prev,
+        [slot]: rest,
+      };
+    });
+  }
+
   return (
     <EquipContext.Provider value={{
       equipped,
@@ -227,6 +259,8 @@ export function EquipProvider({ children }: { children: ReactNode }) {
       removeCardsFromSlot,
       equipProps,
       extractSelectedPropsBonus,
+      equipStone,
+      unequipStone
     }}>
       {children}
     </EquipContext.Provider>

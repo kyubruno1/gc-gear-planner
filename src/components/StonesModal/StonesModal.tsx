@@ -56,6 +56,18 @@ interface StoneDataItem {
   };
 }
 
+export interface StoneData {
+  stone: StoneType;
+  displayValue: number;
+  value: number;
+  effect?: string;
+  effectValueIndex?: number;
+  effectValue?: number;
+  effectValueType?: "flat" | "percent";
+  automaticEffects?: Effect[];
+  statusType: string;
+}
+
 const stoneData = stoneDataJson as StoneDataItem[]
 
 export function StonesModal({
@@ -95,14 +107,15 @@ export function StonesModal({
   const specialEffectsAncient: Effect[] = stoneInfo?.special_effects?.ancient || [];
   const specialEffectsExtra18: Effect[] = stoneInfo?.special_effects?.["18"] || [];
 
+
   // Efeitos que o usuário pode escolher
   const currentEffects = isAncient ? specialEffectsAncient : specialEffectsDefault;
 
   // Efeitos automáticos +18
-  let automaticEffects: Effect[] = [];
-  if (stoneValueSelected === 18) {
-    automaticEffects = specialEffectsExtra18;
-  }
+  // let automaticEffects: Effect[] = [];
+  // if (stoneValueSelected === 18) {
+  //   automaticEffects = specialEffectsExtra18;
+  // }
 
   function handleStoneClick(stone: StoneType) {
     if (activeStone === stone) {
@@ -137,6 +150,9 @@ export function StonesModal({
       alert("Tipo da pedra não definido!");
       return;
     }
+
+
+    const automaticEffects = value === 18 ? specialEffectsExtra18 : [];
 
     onApply(slotName, {
       stone: activeStone,

@@ -17,6 +17,7 @@ interface StoneData {
   statusType: string;
   stone: StoneType;
   value: number;
+  displayValue?: string;
   effect?: string;
   effectValueIndex?: number;
   effectValue?: number;
@@ -32,7 +33,6 @@ function stoneDataToStatus(data: StoneData): Partial<CharacterStatus> {
   // soma o valor da pedra no status correto
   if (statusKey) {
     status[statusKey] = (status[statusKey] ?? 0) + data.value;
-    console.log(`[stoneDataToStatus] Adicionando ${data.value} em ${statusKey}`);
   }
 
   // aplica o efeito especial, se houver
@@ -62,7 +62,7 @@ type PropsData = Record<string, PropValue>;
 
 export function Items({ name }: ItemProps) {
   const { addSource, removeSource } = useAtkTotal();
-  const { equipped, equipItem, unequipItem, equipProps } = useEquip();
+  const { equipped, equipItem, unequipItem, equipProps, equipStone, unequipStone } = useEquip();
   const equippedItem = equipped[name]; // nome do slot
 
   const [itemModal, setItemModal] = useState<string | null>(null);
@@ -89,6 +89,7 @@ export function Items({ name }: ItemProps) {
 
     const status = stoneDataToStatus(data);
     addSource("stone:" + slotName, status);
+    equipStone(slotName, data);
     setStoneModal(false);
   }
 
@@ -98,6 +99,7 @@ export function Items({ name }: ItemProps) {
       delete copy[slotName];
       return copy;
     });
+    unequipStone(slotName);
     removeSource("stone:" + slotName);
   }
 
@@ -139,7 +141,7 @@ export function Items({ name }: ItemProps) {
               <div
                 className={`${rarityColors[stoneValues[name].stone]} text-xs font-bold px-1.5 py-[1px] rounded shadow`}
               >
-                +{stoneValues[name].value}
+                +{stoneValues[name].displayValue}
               </div>
             </div>
           )}
