@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { CharacterStatus } from "../../context/AtkTotalContext";
-import { gradeColors, itemNames, slotNames } from "../../data/ItemNames";
+import { EquippedItem } from "../../context/EquipContext";
+import { gradeColors, itemNames, slotNames } from "../../utils/ItemNames";
 import { BaseModal } from "../BaseModal/BaseModal";
 
 
-interface Item extends CharacterStatus {
+interface Item extends EquippedItem {
   name: string;
   img: string;
   grade: string;

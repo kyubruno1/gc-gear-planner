@@ -4,6 +4,54 @@ import { useEquip } from "../../context/EquipContext";
 import { CardModal } from "../CardModal/CardModal";
 import { EquipmentModal } from "../EquipmentModal/EquipmentModal";
 import { PropsModal } from "../PropsModal/PropsModal";
+import { StonesModal } from "../StonesModal/StonesModal";
+
+type StoneType = "normal" | "epic";
+
+interface Effect {
+  name: keyof CharacterStatus;
+  values: number[];
+}
+
+interface StoneData {
+  statusType: string;
+  stone: StoneType;
+  value: number;
+  effect?: string;
+  effectValueIndex?: number;
+  effectValue?: number;
+  automaticEffects?: Effect[];
+  type?: keyof CharacterStatus;
+}
+
+function stoneDataToStatus(data: StoneData): Partial<CharacterStatus> {
+  const status: Partial<CharacterStatus> = {};
+
+  const statusKey = data.statusType as keyof CharacterStatus | undefined;
+
+  // soma o valor da pedra no status correto
+  if (statusKey) {
+    status[statusKey] = (status[statusKey] ?? 0) + data.value;
+    console.log(`[stoneDataToStatus] Adicionando ${data.value} em ${statusKey}`);
+  }
+
+  // aplica o efeito especial, se houver
+  if (data.effect) {
+    status[data.effect as keyof CharacterStatus] =
+      (status[data.effect as keyof CharacterStatus] ?? 0) + (data.effectValue ?? 0);
+  }
+
+  // aplica os efeitos automáticos (+18), se houver
+  if (data.automaticEffects && data.automaticEffects.length > 0) {
+    for (const effect of data.automaticEffects) {
+      const key = effect.name as keyof CharacterStatus;
+      const val = effect.values[0] ?? 0;
+      status[key] = (status[key] ?? 0) + val;
+    }
+  }
+
+  return status;
+}
 
 interface ItemProps {
   name: string;
@@ -13,26 +61,60 @@ type PropValue = number | { min: number; max: number };
 type PropsData = Record<string, PropValue>;
 
 export function Items({ name }: ItemProps) {
-  const { addSource } = useAtkTotal();
-
+  const { addSource, removeSource } = useAtkTotal();
   const { equipped, equipItem, unequipItem, equipProps } = useEquip();
   const equippedItem = equipped[name]; // nome do slot
 
   const [itemModal, setItemModal] = useState<string | null>(null);
   const [cardModal, setCardModal] = useState<string | null>(null);
   const [propsModal, setPropsModal] = useState<PropsData | null>(null);
+  const [stoneModal, setStoneModal] = useState(false);
 
-  function handleSelectItem(item: CharacterStatus & { name: string; type: string; img: string }) {
-    equipItem(item);
-    addSource(item.name, item);
-    setItemModal(null);
+  const [stoneValues, setStoneValues] = useState<{
+    [slot: string]: StoneData | undefined;
+  }>({});
+
+  const [hovering, setHovering] = useState(false);
+
+  const rarityColors: Record<string, string> = {
+    normal: "bg-gray-300 text-gray-900",
+    epic: "bg-gold text-white",
+  };
+
+  function handleApplyStone(slotName: string, data: StoneData) {
+    setStoneValues((prev) => ({
+      ...prev,
+      [slotName]: data,
+    }));
+
+    const status = stoneDataToStatus(data);
+    addSource("stone:" + slotName, status);
+    setStoneModal(false);
+  }
+
+  function handleRemoveStone(slotName: string) {
+    setStoneValues((prev) => {
+      const copy = { ...prev };
+      delete copy[slotName];
+      return copy;
+    });
+    removeSource("stone:" + slotName);
+  }
+
+  function handleUnequipItem(slotName: string) {
+    unequipItem(slotName);
+    handleRemoveStone(slotName);
+    removeSource(`props-${slotName}`);
+    removeSource(`equip:${slotName}:card0`);
+    removeSource(`equip:${slotName}:card1`);
+    removeSource(`equip:${slotName}:card2`);
+    removeSource(`equip:${slotName}:card3`);
+    removeSource(`equip:${slotName}:props`);
+    removeSource(`equip:${slotName}`);
   }
 
   const imagePath = (fileName: string) =>
     new URL(`../../../public/assets/images/equip-clean/${fileName}`, import.meta.url).href;
-
-  const [hovering, setHovering] = useState(false);
-
 
   return (
     <>
@@ -43,7 +125,7 @@ export function Items({ name }: ItemProps) {
       >
         <button
           type="button"
-          className="border-none p-0 cursor-pointer"
+          className="border-none p-0 cursor-pointer relative"
           onClick={() => setItemModal(name)}
         >
           <img
@@ -51,17 +133,36 @@ export function Items({ name }: ItemProps) {
             alt={equippedItem ? equippedItem.name : name}
             className="w-[95px] h-[95px] border-2 border-gray rounded-md bg-lightgray"
           />
+
+          {stoneValues[name] && (
+            <div className={`absolute bottom-1 right-1 pointer-events-none z-10`}>
+              <div
+                className={`${rarityColors[stoneValues[name].stone]} text-xs font-bold px-1.5 py-[1px] rounded shadow`}
+              >
+                +{stoneValues[name].value}
+              </div>
+            </div>
+          )}
         </button>
 
         {hovering && equippedItem && (
           <div className="absolute top-0 left-16 ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10">
             {equippedItem.equipType === "armor_set" && (
-              <button
-                onClick={() => setCardModal(name)}
-                className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs"
-              >
-                Encaixe
-              </button>
+              <>
+                <button
+                  onClick={() => setCardModal(name)}
+                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs"
+                >
+                  Encaixe
+                </button>
+
+                <button
+                  onClick={() => setStoneModal(true)}
+                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-blue-500 hover:bg-blue-400 text-xs"
+                >
+                  Pedra
+                </button>
+              </>
             )}
 
             <button
@@ -72,7 +173,7 @@ export function Items({ name }: ItemProps) {
             </button>
 
             <button
-              onClick={() => unequipItem(name)}
+              onClick={() => handleUnequipItem(name)}
               className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-red-400 hover:bg-red-600 text-xs"
             >
               Remover
@@ -84,12 +185,16 @@ export function Items({ name }: ItemProps) {
       {itemModal && (
         <EquipmentModal
           type={itemModal}
-          onSelectItem={handleSelectItem}
+          onSelectItem={(item) => {
+            equipItem(item);
+            addSource(item.name, item);
+            setItemModal(null);
+          }}
           onClose={() => setItemModal(null)}
         />
       )}
 
-      {cardModal && (
+      {cardModal && equippedItem && (
         <CardModal
           onClose={() => setCardModal(null)}
           rarity={equippedItem.grade || "rare"}
@@ -105,17 +210,24 @@ export function Items({ name }: ItemProps) {
           onClose={(selectedProps) => {
             equipProps(name, selectedProps);
 
-            // Filtra somente props válidas e converte para CharacterStatus
             const validProps = Object.fromEntries(
-              Object.entries(selectedProps).filter(([key]) =>
-                key in equippedItem
-              )
+              Object.entries(selectedProps).filter(([key]) => key in equippedItem)
             );
 
             addSource(`props-${name}`, validProps as Partial<CharacterStatus>);
-
             setPropsModal(null);
           }}
+        />
+      )}
+
+      {stoneModal && equippedItem && (
+        <StonesModal
+          onClose={() => setStoneModal(false)}
+          rarity={equippedItem.grade as "normal" | "epic"}
+          isAncient={equippedItem.grade === "ancient"}
+          slotName={name}
+          initialValue={stoneValues[name]}
+          onApply={handleApplyStone}
         />
       )}
     </>

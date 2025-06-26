@@ -40,7 +40,6 @@ const AtkTotalContext = createContext<AtkTotalContextType | undefined>(undefined
 export function AtkTotalProvider({ children }: { children: ReactNode }) {
   const { equipped, calculateBonusExtras, flattenBonusExtras } = useEquip();
 
-  // Status base inicial
   const statusBase: CharacterStatus = {
     total_attack: 0,
     attack: 1000,
@@ -61,14 +60,12 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     gp: 0,
   };
 
-  // Agora as fontes podem ser parciais (ex: props com só algumas stats)
   const [sources, setSources] = useState<Record<string, Partial<CharacterStatus>>>({
     base: statusBase,
   });
   const [characterStatus, setCharacterStatus] = useState<CharacterStatus>(statusBase);
   const [atkTotal, setAtkTotal] = useState<number>(calculateAtkTotal(statusBase));
 
-  // Função para garantir que todos os campos existam (mesmo que 0)
   function normalizeCharacterStatus(partial: Partial<CharacterStatus>): CharacterStatus {
     const empty: CharacterStatus = {
       total_attack: 0,
@@ -92,7 +89,6 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     return { ...empty, ...partial };
   }
 
-  // Soma todas as fontes, normalizando cada uma antes para evitar undefined
   function sumSources(sources: Record<string, Partial<CharacterStatus>>): CharacterStatus {
     const empty: CharacterStatus = {
       total_attack: 0,
@@ -123,7 +119,6 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     }, empty);
   }
 
-  // Função de cálculo do ataque total (sua fórmula)
   function calculateAtkTotal(character: CharacterStatus): number {
     const {
       attack,
@@ -144,37 +139,26 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  // Atualiza/add nova fonte parcial
   function addSource(id: string, status: Partial<CharacterStatus>) {
-    setSources((prev) => {
-      const updated = { ...prev, [id]: status };
-      const summed = sumSources(updated);
-      setCharacterStatus(summed);
-      setAtkTotal(calculateAtkTotal(summed));
-      return updated;
-    });
+    setSources((prev) => ({
+      ...prev,
+      [id]: status,
+    }));
   }
 
-  // Remove fonte por id
   function removeSource(id: string) {
     if (id === "base") return;
     setSources((prev) => {
       const updated = { ...prev };
       delete updated[id];
-      const summed = sumSources(updated);
-      setCharacterStatus(summed);
-      setAtkTotal(calculateAtkTotal(summed));
       return updated;
     });
   }
 
   function clearSources() {
     setSources({ base: statusBase });
-    setCharacterStatus(statusBase);
-    setAtkTotal(calculateAtkTotal(statusBase));
   }
 
-  // Extrai os status dos equipamentos e cartas, normalizando-os
   function extractStatusFromEquipments(): Record<string, Partial<CharacterStatus>> {
     const extracted: Record<string, Partial<CharacterStatus>> = {};
 
@@ -188,7 +172,6 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
         });
       }
 
-      // Também inclui as props selecionadas do item (que são parciais)
       if (item.selectedProps) {
         extracted[`equip:${slot}:props`] = normalizeCharacterStatus(item.selectedProps);
       }
@@ -197,7 +180,7 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     return extracted;
   }
 
-  // Sempre que os equipamentos mudam, atualiza as fontes e status
+  // Atualiza as fontes relacionadas a equipamentos e bônus, mas mantém as pedras
   useEffect(() => {
     const bonusSets = calculateBonusExtras();
     const flatBonus = flattenBonusExtras(bonusSets);
@@ -205,17 +188,27 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
 
     const sourcesFromEquip = extractStatusFromEquipments();
 
-    const merged: Record<string, Partial<CharacterStatus>> = {
-      base: statusBase,
-      ...sourcesFromEquip,
-      "bonusSet:all": normalizedBonus,
-    };
+    setSources((prev) => {
+      // Extrai só as pedras que já existem no estado
+      const stones = Object.fromEntries(
+        Object.entries(prev).filter(([key]) => key.startsWith("stone:"))
+      );
 
-    setSources(merged);
-    const summed = sumSources(merged);
+      return {
+        base: statusBase,
+        ...sourcesFromEquip,
+        "bonusSet:all": normalizedBonus,
+        ...stones, // mantém pedras no estado
+      };
+    });
+  }, [equipped]);
+
+  // Recalcula characterStatus e atkTotal toda vez que sources mudam
+  useEffect(() => {
+    const summed = sumSources(sources);
     setCharacterStatus(summed);
     setAtkTotal(calculateAtkTotal(summed));
-  }, [equipped]);
+  }, [sources]);
 
   return (
     <AtkTotalContext.Provider
@@ -231,6 +224,7 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     </AtkTotalContext.Provider>
   );
 }
+
 
 export function useAtkTotal() {
   const context = useContext(AtkTotalContext);

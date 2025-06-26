@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { ItemProps, ItemPropValue } from "../../context/EquipContext";
-import { statusLabels } from "../../data/StatusLabel";
+import { statusLabels } from "../../utils/StatusLabel";
 import { BaseModal } from "../BaseModal/BaseModal";
 
+type ItemPropValue = number | { min: number; max: number };
 interface PropsModalProps {
   onClose: (selectedProps: Record<string, number>) => void;
   propsData: ItemProps;
   rarity: "rare" | "epic" | "legendary" | "ancient";
-  initialSelectedProps?: Record<string, number>;  // novo prop
+  initialSelectedProps?: Record<string, ItemPropValue>;
 }
 
 const maxSelectionByRarity = {

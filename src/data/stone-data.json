@@ -1,0 +1,92 @@
+[
+  {
+    "stone": "epic",
+    "data": {
+      "helmet": {
+        "type": "defense",
+        "special_effects": {
+        "default": [
+          {
+            "name": "fortify_bonus",
+            "values": [20.0, 5.0],
+            "valueType": "percent"
+          },
+          {
+            "name": "protect_destruction",
+            "values": [20.0, 5.0],
+            "valueType": "percent"
+
+          }
+        ],
+        "ancient": [
+          {
+            "name": "attack",
+            "values": [600, 300],
+            "valueType": "flat"
+          },
+          {
+            "name": "crit_resistance",
+            "values": [20.0, 15.0],
+            "valueType": "percent"
+          }
+        ],
+        "18": [
+          {
+            "name": "crit_damage",
+            "values": [3.0],
+            "valueType": "percent"
+          }
+        ]
+      },
+        "0": 0,
+        "1": 130,
+        "2": 133,
+        "3": 155,
+        "4": 161,
+        "5": 169,
+        "6": 180,
+        "7": 193,
+        "8": 208,
+        "9": 227,
+        "10": 249,
+        "11": 273,
+        "12": 300,
+        "13": 329,
+        "14": 360,
+        "15": 391,
+        "16": 421,
+        "17": 450,
+        "18": 477
+      }      
+    }
+  },
+  {
+    "stone": "normal",
+    "data": {
+      "helmet": {
+        "type": "defense",
+        "special_effects": {
+        },
+        "0": 0,
+        "1": 130,
+        "2": 133,
+        "3": 155,
+        "4": 161,
+        "5": 169,
+        "6": 180,
+        "7": 193,
+        "8": 208,
+        "9": 227,
+        "10": 249,
+        "11": 273,
+        "12": 300,
+        "13": 329,
+        "14": 360,
+        "15": 391,
+        "16": 421,
+        "17": 450,
+        "18": 477
+      }
+    }
+  }
+]
