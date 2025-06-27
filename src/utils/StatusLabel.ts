@@ -21,7 +21,10 @@ export const statusLabels: Record<string, string> = {
   back_attack: "Dano pelas Costas",
   prop_level: "Nível da Prop",
   fortify_bonus: "Aumento de chance de sucesso de fortificação",
-  protect_destruction: "Chance de proteção de destruição"
+  protect_destruction: "Chance de proteção de destruição",
+  mp_absorption: "Absorção de MP",
+  hp_absorption: "Absorção de HP",
+  mp_counter_attack: "Custo de MP do Contra-ataque"
 };
 
 // Inverte o objeto: valores viram chaves e chaves viram valores
@@ -40,4 +43,30 @@ const invertedStatusLabels = invertLabels(statusLabels);
 // Função para mapear nome legível para chave
 export function mapEffectNameToStatusKey(name: string): keyof CharacterStatus | null {
   return (invertedStatusLabels[name] as keyof CharacterStatus) ?? null;
+}
+
+// Conjunto de status que são percentuais
+const percentStats = new Set([
+  "crit_chance",
+  "crit_damage",
+  "mp_rec",
+  "hell_spear_chance",
+  "taint_resistance",
+  "crit_resistance",
+  "hp_rec",
+  "counter_attack_resistance",
+  "exp",
+  "gp",
+  "back_attack",
+  "fortify_bonus",
+  "protect_destruction",
+  "mp_counter_attack"
+]);
+
+// Função para formatar valor (com % se necessário)
+export function formatStatValue(key: string, value: number): string {
+  if (percentStats.has(key)) {
+    return `${value.toFixed(2)}%`;
+  }
+  return `${value}`;
 }

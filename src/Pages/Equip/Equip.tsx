@@ -14,51 +14,51 @@ export function Equip() {
   const { calculateBonusExtras } = useEquip()
   const bonusExtras = calculateBonusExtras()
 
-  console.log(bonusExtras)
   return (
     <>
       <Header />
       <PageContainer>
-        <div className="justify-start flex flex-col gap-2.5 align-start">
-          {equipmentLeft.map((slot) => {
-            return <Items name={slot} key={slot} />
-          })}
+        <div className='grid grid-cols-[130px_2fr_260px] grid-rows-[auto_1fr_auto]'>
+          <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-start">
+            {equipmentLeft.map((slot) => {
+              return <Items name={slot} key={slot} />
+            })}
+          </div>
+
+          <div className="flex justify-center align-center">
+            <img src={characterImage} alt="Character" className='max-w-full h-auto' />
+          </div>
+
+          <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-end">
+            {equipmentRight.map((slot) => {
+              return <Items name={slot} key={slot} />
+            })}
+          </div>
+
+          <Status />
+
+          {/* BÔNUS DE SETS APLICADOS */}
+          <div className='mt-8 text-white p-4 space-y-4 col-span-3 bg-gray-900'>
+            <h2>Bônus de Set Ativos:</h2>
+            <ul>
+              {Object.entries(bonusExtras).map(([key, stats]) => (
+                <li key={key}>
+                  <strong>{key}:</strong>
+                  <ul>
+                    {Object.entries(stats).map(([statKey, statValue]) => (
+                      <li key={statKey}>
+                        {statKey}: {statValue}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div />
+
+          <EquipOverview />
         </div>
-
-
-        <div className="flex justify-center align-center">
-          <img src={characterImage} alt="Character" className='max-w-full h-auto' />
-        </div>
-
-        <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-end">
-          {equipmentRight.map((slot) => {
-            return <Items name={slot} key={slot} />
-          })}
-        </div>
-
-        <Status />
-
-        {/* BÔNUS DE SETS APLICADOS */}
-        <div className='mt-8 text-white'>
-          <h2>Bônus de Set Ativos:</h2>
-          <ul>
-            {Object.entries(bonusExtras).map(([key, stats]) => (
-              <li key={key}>
-                <strong>{key}:</strong>
-                <ul>
-                  {Object.entries(stats).map(([statKey, statValue]) => (
-                    <li key={statKey}>
-                      {statKey}: {statValue}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div />
-
-        <EquipOverview />
       </PageContainer>
     </>
   )

@@ -4,22 +4,15 @@
     "type": ["weapon", "gloves"],
     "equipType": "card",
     "img": "assets/images/cards/gaian.png",
-    "total_attack": 0,
-    "attack": 0,
-    "crit_chance": 0,
-    "crit_damage": 31.5,
-    "sp_attack": 0,
-    "mp_rec": 0,
-    "hell_spear_chance": 0,
-    "hell_spear": 0,
-    "taint_resistance": 0,
-    "defense": 0,
-    "hp": 0,
-    "crit_resistance": 0.47,
-    "sp_def": 0,
-    "hp_rec": 0,
-    "counter_attack_resistance": 0,
-    "exp": 0,
-    "gp": 0
+    "effects": [
+      {
+        "name": "crit_damage",
+        "value": 31.5
+      },
+      {
+        "name": "taint_resistance",
+        "value": 0.47
+      }
+    ]
   }
 ]

@@ -1,6 +1,21 @@
 [
   {
     "bonusType": "berkas_epic",
+    "name": "Conjunto do Dragão de Ferro",
+    "setPieces": [
+      "berkas_epic_helmet", 
+      "berkas_epic_upper_armor", 
+      "berkas_epic_lower_armor", 
+      "berkas_epic_gloves", 
+      "berkas_epic_shoes",
+      "berkas_epic_mantle",
+      "berkas_epic_upper_head",
+      "berkas_epic_lower_head",
+      "berkas_epic_upper_back",
+      "berkas_epic_lower_back",
+      "berkas_epic_arms",
+      "berkas_epic_weapon"
+    ],
     "2": {
       "defense": 141
     },
@@ -14,16 +29,19 @@
       "sp_def": 470
     },
     "6": {
+      "mp_absorption": 1783
     },
     "7": {
       "hp_rec": 14.50
     },
     "8": {
+      "mp_counter_attack": -20.60
     },
     "9": {
       "mp_rec": 14.50
     },
     "10": {
+      "hp_absorption": 1783
     },
     "11": {
       "crit_chance": 3.68
@@ -34,6 +52,21 @@
   },
   {
     "bonusType": "berkas_legendary",
+    "name": "Conjunto do Verdadeiro Dragão de Ferro",
+    "setPieces": [
+      "berkas_legendary_helmet", 
+      "berkas_legendary_upper_armor", 
+      "berkas_legendary_lower_armor", 
+      "berkas_legendary_gloves", 
+      "berkas_legendary_shoes",
+      "berkas_legendary_mantle",
+      "berkas_legendary_upper_head",
+      "berkas_legendary_lower_head",
+      "berkas_legendary_upper_back",
+      "berkas_legendary_lower_back",
+      "berkas_legendary_arms",
+      "berkas_legendary_weapon"
+    ],
     "2": {
       "defense": 141
     },
@@ -64,39 +97,5 @@
     "12": {
       "sp_attack": 282
     }
-  },
-  {
-    "bonusType": "void_legendary",
-    "2": {
-    },
-    "3": {
-    },
-    "4": {
-
-    },
-    "5": {
-
-    },
-    "6": {
-
-    },
-    "7": {
-
-    },
-    "8": {
-
-    },
-    "9": {
-
-    },
-    "10": {
-
-    },
-    "11": {
-
-    },
-    "12": {
-
-    }
-  }
+  } 
 ]

@@ -48,8 +48,9 @@ export const itemGrades: Record<string, string> = {
 }
 
 export const gradeColors: Record<string, string> = {
-  common: 'text-gray-500',
-  rare: 'text-blue-400',
-  epic: 'text-gold',
+  common: 'text-equipCommon',
+  rare: 'text-equipRare',
+  epic: 'text-equipEpic',
   legendary: 'text-purple-500',
+  ancient: 'text-equipAncient'
 };

@@ -6,7 +6,7 @@ export function EquipOverview() {
   const { equipped } = useEquip();
   //ISSO AQUI QUEBRA A IMAGEM DO PERSONAGEM
   return (
-    <div className="text-white p-4 space-y-4">
+    <div className="text-white p-4 space-y-4 col-span-3">
       {Object.entries(equipped).map(([slot, item]) => (
         <div key={slot} className="border p-2 rounded bg-gray-900">
           {/* <pre>{JSON.stringify(item, null, 2)}</pre> */}

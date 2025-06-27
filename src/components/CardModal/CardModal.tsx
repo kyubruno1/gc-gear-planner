@@ -86,13 +86,13 @@ export function CardModal({ onClose, rarity, slotName }: CardModalProps) {
   );
 }
 
-function getCardSlotCount(rarity: string): number {
+export function getCardSlotCount(rarity: string): number {
   switch (rarity) {
     case "epic":
       return 2;
     case "legendary":
       return 3;
-    case "ancestral":
+    case "ancient":
       return 4;
     case "rare":
     default:

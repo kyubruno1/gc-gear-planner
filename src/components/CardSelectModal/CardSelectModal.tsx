@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-
-interface Card {
-  name: string;
-  img: string;
-  effect: string;
-}
+import { Card } from "../../context/EquipContext";
+import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
 
 interface CardSelectModalProps {
   onSelectCard: (cardName: string) => void;
@@ -67,7 +63,14 @@ export function CardSelectModal({ onSelectCard, onClose }: CardSelectModalProps)
                 loading="lazy"
               />
               <h4 className="mt-2 font-semibold">{card.name}</h4>
-              <p className="text-sm text-gray-200">{card.effect}</p>
+              <div className="mt-1 text-sm text-gray-200">
+                {card.effects.map((effect, index) => (
+                  <p key={index}>
+                    {/* {effect.name}: {effect.value} */}
+                    {statusLabels[effect.name] || effect.name}: {formatStatValue(effect.name, effect.value)}
+                  </p>
+                ))}
+              </div>
             </div>
           ))}
         </div>

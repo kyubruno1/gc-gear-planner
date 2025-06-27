@@ -162,13 +162,22 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
   function extractStatusFromEquipments(): Record<string, Partial<CharacterStatus>> {
     const extracted: Record<string, Partial<CharacterStatus>> = {};
 
+    function extractCardEffects(card: { effects: { name: string; value: number }[] }): Partial<CharacterStatus> {
+      const effectsObj: Partial<CharacterStatus> = {};
+      card.effects.forEach(effect => {
+        effectsObj[effect.name as keyof CharacterStatus] =
+          (effectsObj[effect.name as keyof CharacterStatus] || 0) + effect.value;
+      });
+      return effectsObj;
+    }
+
     for (const slot in equipped) {
       const item = equipped[slot];
       extracted[`equip:${slot}`] = normalizeCharacterStatus(item);
 
       if (item.cards && item.cards.length > 0) {
         item.cards.forEach((card, index) => {
-          extracted[`equip:${slot}:card${index}`] = normalizeCharacterStatus(card);
+          extracted[`equip:${slot}:card${index}`] = normalizeCharacterStatus(extractCardEffects(card));
         });
       }
 
@@ -224,7 +233,6 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
     </AtkTotalContext.Provider>
   );
 }
-
 
 export function useAtkTotal() {
   const context = useContext(AtkTotalContext);

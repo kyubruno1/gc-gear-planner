@@ -11,6 +11,7 @@ export interface EquippedItem extends CharacterStatus {
   bonusType: string;
   equipType?: string;
   grade: string;
+  equipLvl: number;
   props: ItemProps;
   selectedProps?: Partial<ItemProps>;
   cards?: Card[];
@@ -19,7 +20,10 @@ export interface EquippedItem extends CharacterStatus {
 export interface Card {
   name: string;
   img: string;
-  [key: string]: any;
+  effects: {
+    name: string,
+    value: number,
+  }[];
 }
 
 type ItemPropValue = number | { min: number; max: number };
@@ -63,6 +67,7 @@ interface EquipContextType {
   removeCardsFromSlot: (slot: string) => void;
   equipProps: (slot: string, selectedProps: Partial<ItemProps>) => void;
   extractSelectedPropsBonus: () => Partial<CharacterStatus>;
+  extractCardEffectsBonus: () => Partial<CharacterStatus>;
   equipStone: (slot: string, stone: StoneData) => void;
   unequipStone: (slot: string) => void;
 }
@@ -198,8 +203,6 @@ export function EquipProvider({ children }: { children: ReactNode }) {
     }));
   }
 
-  // Essa função pega o valor numérico dos selectedProps de todos os equipamentos
-  // Somando para cada stat o valor correto (number direto ou o valor selecionado se min/max)
   function extractSelectedPropsBonus(): Partial<CharacterStatus> {
     const bonuses: Partial<CharacterStatus> = {};
 
@@ -217,6 +220,23 @@ export function EquipProvider({ children }: { children: ReactNode }) {
     return bonuses;
   }
 
+  function extractCardEffectsBonus(): Partial<CharacterStatus> {
+    const bonuses: Partial<CharacterStatus> = {};
+
+    Object.values(equipped).forEach(item => {
+      if (!item.cards) return;
+
+      for (const card of item.cards) {
+        for (const effect of card.effects) {
+          const key = effect.name as keyof CharacterStatus;
+          bonuses[key] = (bonuses[key] || 0) + effect.value;
+        }
+      }
+    });
+
+    return bonuses;
+  }
+
   function equipStone(slot: string, stone: StoneData) {
     setEquipped(prev => {
       const item = prev[slot];
@@ -226,7 +246,7 @@ export function EquipProvider({ children }: { children: ReactNode }) {
         ...prev,
         [slot]: {
           ...item,
-          stone,  // adiciona a pedra no item equipado
+          stone,
         },
       };
     });
@@ -237,7 +257,7 @@ export function EquipProvider({ children }: { children: ReactNode }) {
       const item = prev[slot];
       if (!item) return prev;
 
-      const { stone, ...rest } = item; // remove a pedra
+      const { stone, ...rest } = item;
       return {
         ...prev,
         [slot]: rest,
@@ -259,6 +279,7 @@ export function EquipProvider({ children }: { children: ReactNode }) {
       removeCardsFromSlot,
       equipProps,
       extractSelectedPropsBonus,
+      extractCardEffectsBonus,
       equipStone,
       unequipStone
     }}>

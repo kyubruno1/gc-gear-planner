@@ -3,6 +3,7 @@ import { CharacterStatus, useAtkTotal } from "../../context/AtkTotalContext";
 import { useEquip } from "../../context/EquipContext";
 import { CardModal } from "../CardModal/CardModal";
 import { EquipmentModal } from "../EquipmentModal/EquipmentModal";
+import { HoverModal } from "../HoverModal/HoverModal";
 import { PropsModal } from "../PropsModal/PropsModal";
 import { StonesModal } from "../StonesModal/StonesModal";
 
@@ -123,7 +124,7 @@ export function Items({ name }: ItemProps) {
       <div
         className="relative inline-block"
         onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
+      // onMouseLeave={() => setHovering(false)}
       >
         <button
           type="button"
@@ -133,7 +134,7 @@ export function Items({ name }: ItemProps) {
           <img
             src={equippedItem ? equippedItem.img : imagePath(`${name}.png`)}
             alt={equippedItem ? equippedItem.name : name}
-            className="w-[95px] h-[95px] border-2 border-gray rounded-md bg-lightgray"
+            className="w-[110px] h-[110px] border-2 border-gray rounded-md bg-lightgray"
           />
 
           {stoneValues[name] && (
@@ -148,12 +149,13 @@ export function Items({ name }: ItemProps) {
         </button>
 
         {hovering && equippedItem && (
-          <div className="absolute top-0 left-16 ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10">
+          <div className="absolute top-0 left-10 ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10">
+            {/* <div className="grid grid-cols-2 grid-rows-2 gap-[1px] z-10"> */}
             {equippedItem.equipType === "armor_set" && (
               <>
                 <button
                   onClick={() => setCardModal(name)}
-                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs"
+                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs text-outline text-white"
                 >
                   Encaixe
                 </button>
@@ -162,7 +164,7 @@ export function Items({ name }: ItemProps) {
                   onClick={() => setStoneModal(true)}
                   className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-blue-500 hover:bg-blue-400 text-xs"
                 >
-                  Pedra
+                  <img src="public/assets/images/system/clean-stone.png" width={32} height={11} className="mx-auto" />
                 </button>
               </>
             )}
@@ -171,7 +173,7 @@ export function Items({ name }: ItemProps) {
               onClick={() => setPropsModal(equippedItem.props as PropsData)}
               className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-purple-500 hover:bg-purple-400 text-xs"
             >
-              Prop.
+              <img src="public/assets/images/system/arrow_cropped.png" width={32} height={11} className="mx-auto" />
             </button>
 
             <button
@@ -181,6 +183,12 @@ export function Items({ name }: ItemProps) {
               Remover
             </button>
           </div>
+        )}
+
+        {hovering && equippedItem && (
+          <HoverModal
+            slot={name}
+          />
         )}
       </div>
 
