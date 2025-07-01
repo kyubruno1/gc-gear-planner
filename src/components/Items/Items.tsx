@@ -155,7 +155,7 @@ export function Items({ name }: ItemProps) {
               <>
                 <button
                   onClick={() => setCardModal(name)}
-                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs text-outline text-white"
+                  className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-teal-400 hover:bg-teal-600 text-xs text-outline-lg text-white"
                 >
                   Encaixe
                 </button>

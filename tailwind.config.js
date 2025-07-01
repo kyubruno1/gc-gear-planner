@@ -25,8 +25,36 @@ export default {
       borderWidth: {
         3: '3px'
       },
+      
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.text-shadow-title': {
+          'text-shadow': '2px 2px 3px rgba(0,0,0,1)',
+        },
+        '.text-outline-xs': {
+          'text-shadow': `0 0 0.5px #000`
+        },
+        '.text-outline-sm': {
+          'text-shadow': `0 0 1px #000`
+        },
+        '.text-outline-md': {
+          'text-shadow': `0 0 2px #000`
+        },
+        '.text-outline-lg': {
+          'text-shadow': `-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000`
+        },
+        '.hide-scrollbar': {
+        '-ms-overflow-style': 'none',      // IE & Edge
+        'scrollbar-width': 'none'          // Firefox
+        },
+        '.hide-scrollbar::-webkit-scrollbar': {
+          display: 'none'                    // Chrome e Safari
+        }
+      })
+    }
+  ]
 }
 

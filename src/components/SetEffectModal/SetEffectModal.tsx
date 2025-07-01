@@ -43,9 +43,7 @@ export function SetEffectModal(props: SetEffectModalProps) {
 
   return (
     <div className="absolute top-5 left-[31.5rem] ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10 bg-[#2D3649] h-auto w-[32rem] bg-opacity-70 text-white font-bold text-sm">
-      {/* <div className="flex justify-center font-bold py-3 border-b border-bgdarkblue text-gold text-lg">
-        <p className="text-outline-white">Bônus de Conjunto Ativos</p>
-      </div> */}
+
 
       {activeSets.length === 0 && (
         <p className="p-4 text-gray-400">Nenhum conjunto ativo.</p>

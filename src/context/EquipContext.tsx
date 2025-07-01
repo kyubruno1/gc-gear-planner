@@ -18,6 +18,7 @@ export interface EquippedItem extends CharacterStatus {
 }
 
 export interface Card {
+  type: string[];
   name: string;
   img: string;
   effects: {
@@ -26,7 +27,7 @@ export interface Card {
   }[];
 }
 
-type ItemPropValue = number | { min: number; max: number };
+export type ItemPropValue = number | { min: number; max: number };
 
 export interface ItemProps {
   prop_level?: number;

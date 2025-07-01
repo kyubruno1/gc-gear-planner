@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { Card } from "../../context/EquipContext";
 import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
+import { BaseModal } from "../BaseModal/BaseModal";
 
 interface CardSelectModalProps {
+  slot: string;
   onSelectCard: (cardName: string) => void;
   onClose: () => void;
 }
 
-export function CardSelectModal({ onSelectCard, onClose }: CardSelectModalProps) {
+export function CardSelectModal({ slot, onSelectCard, onClose }: CardSelectModalProps) {
   const [cards, setCards] = useState<Card[]>([]);
+  const [selectedEffects, setSelectedEffects] = useState<string[]>([]);
 
   useEffect(() => {
     async function loadCards() {
@@ -23,51 +26,83 @@ export function CardSelectModal({ onSelectCard, onClose }: CardSelectModalProps)
     loadCards();
   }, []);
 
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+  // Filtra pelo slot
+  const cardsBySlot = cards.filter((card) => card.type.includes(slot));
+
+  // Pega lista única de efeitos que existem nas cartas filtradas
+  const allEffects = Array.from(
+    new Set(
+      cardsBySlot.flatMap((card) => card.effects.map((e) => e.name))
+    )
+  ).sort();
+
+  // Filtra as cartas pelos efeitos selecionados (se houver algum filtro ativo)
+  const filteredCards = selectedEffects.length === 0
+    ? cardsBySlot
+    : cardsBySlot.filter((card) =>
+      selectedEffects.some(effectName =>
+        card.effects.some(e => e.name === effectName)
+      )
+    );
+
+  // Função pra alternar efeito selecionado no filtro
+  function toggleEffect(effectName: string) {
+    setSelectedEffects(prev =>
+      prev.includes(effectName)
+        ? prev.filter(e => e !== effectName)
+        : [...prev, effectName]
+    );
+  }
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]"
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-[750px] max-h-[750px] bg-bgdarkblue font-bold shadow-bgdarkblue rounded-md overflow-y-auto p-5 relative border border-primary"
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-white"
-          aria-label="Fechar modal"
-        >
-          ✕
-        </button>
+    <BaseModal onClose={onClose} maxWidth="90rem" title="Selecione uma Carta" titleColor="text-purple-500">
+      <div className="bg-bgdarkblue max-h-[750px] overflow-y-auto hide-scrollbar p-4 border-[7px] border-primary outline-[3px] outline outline-bgdarkblue rounded-md">
 
-        <h2 className="mb-4 text-xl text-white">Selecione uma Carta</h2>
-        <div className="flex flex-wrap gap-3">
-          {cards.map((card) => (
+        {/* Filtros de efeitos */}
+        <div className="mb-4 bg-bgtextdark border-b-[7px] border-primary outline-[3px] outline outline-bgdarkblue rounded-md p-4">
+          <p className="mb-2 text-white font-semibold">Filtre por efeito de carta:</p>
+          <div className="flex flex-wrap gap-2">
+            {allEffects.map((effect) => (
+              <button
+                key={effect}
+                onClick={() => toggleEffect(effect)}
+                className={`px-3 py-1 rounded-full text-sm font-semibold
+          ${selectedEffects.includes(effect)
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-600 text-gray-100 hover:bg-purple-700 hover:text-white"
+                  }
+        `}
+              >
+                {statusLabels[effect] ?? effect}
+              </button>
+            ))}
+          </div>
+        </div>
+
+
+        {/* Grid de cartas filtradas */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {filteredCards.map((card) => (
             <div
               key={card.name}
               onClick={() => onSelectCard(card.name)}
-              className="w-[150px] border border-gray-300 rounded-md p-2.5 cursor-pointer bg-primary hover:bg-primary/80 text-white text-center"
+              className="flex flex-col items-center justify-start rounded-md cursor-pointer shadow-bgdarkblue border-bgdarkblue text-shadow-title font-bold p-4 bg-gradient-to-b from-bluecustom to-bgtextdark hover:brightness-110 min-h-[320px]"
             >
+              <div className="w-full p-1 rounded-md shadow-bgdarkblue h-16">
+                <h4 className="text-center text-white pb-2.5">{card.name}</h4>
+              </div>
               <img
                 src={card.img}
                 alt={card.name}
-                className="w-full h-auto rounded"
+                className="w-full aspect-square rounded-lg"
                 loading="lazy"
               />
-              <h4 className="mt-2 font-semibold">{card.name}</h4>
-              <div className="mt-1 text-sm text-gray-200">
+              <p className="text-lg text-primary mt-2">Efeitos</p>
+              <div className="text-sm text-white mt-2 space-y-1 text-center">
                 {card.effects.map((effect, index) => (
                   <p key={index}>
-                    {/* {effect.name}: {effect.value} */}
-                    {statusLabels[effect.name] || effect.name}: {formatStatValue(effect.name, effect.value)}
+                    {statusLabels[effect.name] ?? effect.name}:{" "}
+                    {formatStatValue(effect.name, effect.value)}
                   </p>
                 ))}
               </div>
@@ -75,6 +110,6 @@ export function CardSelectModal({ onSelectCard, onClose }: CardSelectModalProps)
           ))}
         </div>
       </div>
-    </div>
+    </BaseModal>
   );
 }

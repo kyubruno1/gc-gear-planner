@@ -1,15 +1,17 @@
 [
   {
-    "name": "berkas_epic_gloves",
+    "name": "berkas_legendary_gloves",
     "type": "gloves",
-    "bonusType": "berkas_epic",
+    "bonusType": "berkas_legendary",
     "equipType": "armor_set",
-    "img": "public/assets/images/equip/berkas/berkas_legendary_gloves.png",
+    "grade": "legendary",
+    "equipLvl": 85,
+    "img": "/assets/images/equip/berkas/berkas_legendary_gloves.png",
     "total_attack": 0,
-    "attack": 150,
-    "crit_chance": 5,
-    "crit_damage": 25,
-    "sp_attack": 50,
+    "attack": 1231,
+    "crit_chance": 0,
+    "crit_damage": 0,
+    "sp_attack": 0,
     "mp_rec": 0,
     "hell_spear_chance": 0,
     "hell_spear": 0,
@@ -21,6 +23,19 @@
     "hp_rec": 0,
     "counter_attack_resistance": 0,
     "exp": 0,
-    "gp": 0
+    "gp": 0,
+    "props": {
+      "attack": {"min": 458, "max": 458},
+      "defense": {"min": 259, "max": 259},
+      "hp": {"min": 259, "max": 259},
+      "hp_rec": {"min": 14.50, "max": 14.50},
+      "mp_rec": {"min": 6.41, "max": 6.41},
+      "gp": {"min": 0.31, "max": 0.31},
+      "sp_attack": {"min": 778, "max": 778},
+      "sp_def": {"min": 470, "max": 455},
+      "crit_chance": {"min": 2.98, "max": 2.98},
+      "crit_damage": {"min": 26.55, "max": 26.55},
+      "taint_resistance": {"min": 2.10, "max": 2.10}
+    }
   }
 ]

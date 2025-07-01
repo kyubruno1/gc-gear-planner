@@ -1,4 +1,6 @@
 import characterImage from '../../../public/assets/images/characters/elesis_1.png';
+// import characterImage from '../../../public/assets/images/characters/elesis_4.png';
+import changeCharacter from '../../../public/assets/images/system/change_character.png';
 import { Header } from '../../components/Header/Header';
 import { Items } from '../../components/Items/Items';
 import { PageContainer } from '../../components/Page-container/Page-container';
@@ -18,15 +20,18 @@ export function Equip() {
     <>
       <Header />
       <PageContainer>
-        <div className='grid grid-cols-[130px_2fr_260px] grid-rows-[auto_1fr_auto]'>
+        <div className='grid grid-cols-[8.125rem_2fr_16.25rem] grid-rows-[auto_1fr_auto]'>
           <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-start">
             {equipmentLeft.map((slot) => {
               return <Items name={slot} key={slot} />
             })}
           </div>
 
-          <div className="flex justify-center align-center">
-            <img src={characterImage} alt="Character" className='max-w-full h-auto' />
+          <div className="relative flex justify-center items-center">
+            <button className="absolute top-2 right-2 z-10">
+              <img src={changeCharacter} className='w-20 h-w-20 rounded-md' />
+            </button>
+            <img src={characterImage} alt="Character" className="w-[60.25rem] h-[50rem]" />
           </div>
 
           <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-end">

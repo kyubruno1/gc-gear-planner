@@ -24,7 +24,16 @@ export const statusLabels: Record<string, string> = {
   protect_destruction: "Chance de proteção de destruição",
   mp_absorption: "Absorção de MP",
   hp_absorption: "Absorção de HP",
-  mp_counter_attack: "Custo de MP do Contra-ataque"
+  mp_counter_attack: "Custo de MP do Contra-ataque",
+  fatal_mp_rec: "Recuperação de MP no Fatal",
+  fatal_super_armor: "Super Armadura no Fatal",
+  grab_resistance: "Resistência a agarrão",
+  potion_effect_rec: "Aumento de Efeito de Poção de Recuperação",
+  fatal_potion_effect_rec: "Aumento de Efeito de Poção de Recuperação no Fatal",
+  mov_speed: "Aumento de Velocidade de Movimento",
+  fatal_mov_speed: "Aumento de Velocidade de Movimento no Fatal",
+  pet_mp_rec: "Velocidade de Recuperação de MP da Mascote",
+  fatal_attack_up: "Aumento de Ataque no Fatal"
 };
 
 // Inverte o objeto: valores viram chaves e chaves viram valores

@@ -1,13 +1,17 @@
 [
   {
-    "name": "mock",
+    "name": "Colar do Vento",
     "type": "necklace",
-    "img": "src/assets/images/titles/apocalipse.png",
+    "bonusType": "necklace",
+    "equipType": "accessories_set",
+    "grade": "normal",
+    "equipLvl": 0,
+    "img": "/assets/images/equip/berkas/berkas_legendary_arms.png",
     "total_attack": 0,
-    "attack": 150,
-    "crit_chance": 5,
-    "crit_damage": 25,
-    "sp_attack": 50,
+    "attack": 20,
+    "crit_chance": 0,
+    "crit_damage": 0,
+    "sp_attack": 0,
     "mp_rec": 0,
     "hell_spear_chance": 0,
     "hell_spear": 0,
@@ -19,6 +23,8 @@
     "hp_rec": 0,
     "counter_attack_resistance": 0,
     "exp": 0,
-    "gp": 0
+    "gp": 0,
+    "props": {
+    }
   }
 ]
