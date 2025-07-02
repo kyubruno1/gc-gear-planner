@@ -3,72 +3,74 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "tippy.js/dist/tippy.css";
 import stoneDataJson from "../../data/stone-data.json";
+import { Effect, StoneType } from "../../types/stones";
 import { statusLabels } from "../../utils/StatusLabel";
 import { BaseModal } from "../BaseModal/BaseModal";
+import { StoneDataItem, StonesModalProps } from "./StonesModal.types";
 
-type StoneType = "normal" | "epic";
+// type StoneType = "normal" | "epic";
 
-interface StonesModalProps {
-  onClose: () => void;
-  rarity: "normal" | "epic" | "ancient";
-  isAncient: boolean;
-  slotName: string;
-  initialValue?: {
-    stone: StoneType;
-    value: number;
-    effect?: string;
-    effectValueIndex?: number;
-  };
-  onApply: (
-    slotName: string,
-    data: {
-      stone: StoneType;
-      displayValue: number;
-      value: number;
-      effect?: string;
-      effectValueIndex?: number;
-      effectValue?: number;
-      effectValueType?: "flat" | "percent";
-      automaticEffects?: Effect[];
-      statusType: string;
-    }
-  ) => void;
-}
+// interface StonesModalProps {
+//   onClose: () => void;
+//   rarity: "normal" | "epic" | "ancient";
+//   isAncient: boolean;
+//   slotName: string;
+//   initialValue?: {
+//     stone: StoneType;
+//     value: number;
+//     effect?: string;
+//     effectValueIndex?: number;
+//   };  
+//   onApply: (
+//     slotName: string,
+//     data: {
+//       stone: StoneType;
+//       displayValue: number;
+//       value: number;
+//       effect?: string;
+//       effectValueIndex?: number;
+//       effectValue?: number;
+//       effectValueType?: "flat" | "percent";
+//       automaticEffects?: Effect[];
+//       statusType: string;
+//     }
+//   ) => void;
+// }
 
-interface Effect {
-  name: string;
-  values: number[];
-  valueType: "flat" | "percent";
-}
+// interface Effect {
+//   name: string;
+//   values: number[];
+//   valueType: "flat" | "percent";
+// }
 
-interface StoneSlotData {
-  type: string;
-  special_effects: {
-    default?: Effect[];
-    ancient?: Effect[];
-    "18"?: Effect[];
-  };
-  [level: string]: any;
-}
+// interface StoneSlotData {
+//   type: string;
+//   special_effects: {
+//     default?: Effect[];
+//     ancient?: Effect[];
+//     "18"?: Effect[];
+//   };
+//   [level: string]: any;
+// }
 
-interface StoneDataItem {
-  stone: "normal" | "epic";
-  data: {
-    [slotName: string]: StoneSlotData;
-  };
-}
+// interface StoneDataItem {
+//   stone: "normal" | "epic";
+//   data: {
+//     [slotName: string]: StoneSlotData;
+//   };
+// }
 
-export interface StoneData {
-  stone: StoneType;
-  displayValue: number;
-  value: number;
-  effect?: string;
-  effectValueIndex?: number;
-  effectValue?: number;
-  effectValueType?: "flat" | "percent";
-  automaticEffects?: Effect[];
-  statusType: string;
-}
+// export interface StoneData {
+//   stone: StoneType;
+//   displayValue: number;
+//   value: number;
+//   effect?: string;
+//   effectValueIndex?: number;
+//   effectValue?: number;
+//   effectValueType?: "flat" | "percent";
+//   automaticEffects?: Effect[];
+//   statusType: string;
+// }
 
 const stoneData = stoneDataJson as StoneDataItem[];
 
@@ -142,7 +144,7 @@ export function StonesModal({ onClose, isAncient, slotName, initialValue, onAppl
     const effectData = currentEffects.find((e) => e.name === selectedEffect);
 
     const effectValue = effectData?.values[effectValueIndex] ?? undefined;
-    const effectValueType = effectData?.valueType ?? "flat";
+    const effectValueType = (effectData?.valueType as "percent" | "flat") ?? "flat";
 
     if (!stoneInfo?.type) {
       toast.error("Tipo da pedra não definido!", {

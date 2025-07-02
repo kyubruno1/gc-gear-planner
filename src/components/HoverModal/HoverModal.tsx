@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useEquip } from "../../context/EquipContext";
+import { getCardSlotCount } from "../../utils/getCardSlotCount";
 import { gradeColors, itemGrades, itemNames, slotNames } from "../../utils/ItemNames";
 import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
-import { getCardSlotCount } from "../CardModal/CardModal";
 import { SetEffectModal } from "../SetEffectModal/SetEffectModal";
 
 interface HoverModalProps {
@@ -14,13 +14,13 @@ export function HoverModal({ slot }: HoverModalProps) {
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (e.altKey) {
+      if (e.key === "Alt") {
         setAltPressed(true);
       }
     }
 
     function onKeyUp(e: KeyboardEvent) {
-      if (!e.altKey) {
+      if (e.key === "Alt") {
         setAltPressed(false);
       }
     }
@@ -37,6 +37,7 @@ export function HoverModal({ slot }: HoverModalProps) {
   const { equipped } = useEquip();
   const equippedItem = equipped[slot];
   if (!equippedItem) return null; // Segurança caso não tenha equipamento nesse slot
+
 
   const gradeColor = gradeColors[equippedItem.grade];
 
@@ -154,10 +155,10 @@ export function HoverModal({ slot }: HoverModalProps) {
             {equippedItem.stone?.effect && equippedItem.equipType !== "accessories_set" && (
               <div className="mt-2 text-outline-md">
                 <p className="text-yellow-400 font-bold">
-                  Propriedade de fortificação: {statusLabels[equippedItem.stone.effect]} + {formatStatValue(equippedItem.stone.effect, equippedItem.stone.effectValue)}
+                  Propriedade de fortificação: {statusLabels[equippedItem.stone.effect]} + {formatStatValue(equippedItem.stone.effect, equippedItem.stone.effectValue ?? 0)}
                 </p>
                 <p
-                  className={`font-bold text-sm ${equippedItem.stone.displayValue === 18 ? "text-equipAncient" : "text-gray-400"
+                  className={`font-bold text-sm ${Number(equippedItem.stone.displayValue) === 18 ? "text-equipAncient" : "text-gray-400"
                     }`}
                 >
                   Propriedade de fortificação: Dano Crítico +3.00% (+18 Fortificado)

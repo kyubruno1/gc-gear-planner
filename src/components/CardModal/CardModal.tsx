@@ -1,20 +1,16 @@
 import { Trash } from "phosphor-react";
 import { useEffect, useState } from "react";
-import { Card, useEquip } from "../../context/EquipContext";
+import { useEquip } from "../../context/EquipContext";
+import { Card } from "../../types/cards";
+import { getCardSlotCount } from "../../utils/getCardSlotCount";
 import { gradeColors, itemNames } from "../../utils/ItemNames";
 import { BaseModal } from "../BaseModal/BaseModal";
 import { CardSelectModal } from "../CardSelectModal/CardSelectModal";
-
-interface CardModalProps {
-  onClose: () => void;
-  rarity: string;
-  slotName: string;
-}
+import { CardModalProps } from "./CardModal.types";
 
 export function CardModal({ onClose, rarity, slotName }: CardModalProps) {
   const { equipped, equipCards } = useEquip();
   const equippedItem = equipped[slotName];
-
 
   const [allCards, setAllCards] = useState<Card[]>([]);
   const [selectedCards, setSelectedCards] = useState<(Card | null)[]>([]);
@@ -143,19 +139,4 @@ export function CardModal({ onClose, rarity, slotName }: CardModalProps) {
   );
 }
 
-export function getCardSlotCount(rarity: string): number {
-  switch (rarity.toLowerCase()) {
-    case "epic":
-      return 2;
-    case "legendary":
-      return 3;
-    case "ancient":
-      return 4;
-    case "rare":
-      return 1;
-    case "acessories":
-      return 0;
-    default:
-      return 1;
-  }
-}
+

@@ -1,4 +1,4 @@
-import { CharacterStatus } from "../context/AtkTotalContext";
+import { CharacterStatus } from "../types/characterStatus";
 
 export const statusLabels: Record<string, string> = {
   total_attack: "Ataque Total",

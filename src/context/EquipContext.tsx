@@ -1,57 +1,60 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { StoneData } from "../components/StonesModal/StonesModal";
 import bonusSets from '../data/bonus-set.json';
-import { CharacterStatus } from "./AtkTotalContext";
+import { Card } from "../types/cards";
+import { CharacterStatus } from "../types/characterStatus";
+import { EquippedItem } from "../types/equip";
+import { ItemProps } from "../types/ItemProps";
 
-export interface EquippedItem extends CharacterStatus {
-  stone?: StoneData;
-  name: string;
-  type: string;
-  img: string;
-  bonusType: string;
-  equipType?: string;
-  grade: string;
-  equipLvl: number;
-  props: ItemProps;
-  selectedProps?: Partial<ItemProps>;
-  cards?: Card[];
-}
+// export interface EquippedItem extends CharacterStatus {
+//   stone?: StoneData;
+//   name: string;
+//   type: string;
+//   img: string;
+//   bonusType: string;
+//   equipType?: string;
+//   grade: string;
+//   equipLvl: number;
+//   props: ItemProps;
+//   selectedProps?: Partial<ItemProps>;
+//   cards?: Card[];
+// }
 
-export interface Card {
-  type: string[];
-  name: string;
-  img: string;
-  effects: {
-    name: string,
-    value: number,
-  }[];
-}
+// export interface Card {
+//   type: string[];
+//   name: string;
+//   img: string;
+//   effects: {
+//     name: string,
+//     value: number,
+//   }[];
+// }
 
-export type ItemPropValue = number | { min: number; max: number };
+// export type ItemPropValue = number | { min: number; max: number };
 
-export interface ItemProps {
-  prop_level?: number;
-  attack?: ItemPropValue;
-  defense?: ItemPropValue;
-  hp?: ItemPropValue;
-  hp_rec?: ItemPropValue;
-  mp_rec?: ItemPropValue;
-  lv_min?: ItemPropValue;
-  gp?: ItemPropValue;
-  sp_attack?: ItemPropValue;
-  sp_def?: ItemPropValue;
-  crit_chance?: ItemPropValue;
-  crit_damage?: ItemPropValue;
-  taint_resistance?: ItemPropValue;
-  back_attack?: ItemPropValue;
-  exp?: ItemPropValue;
-  hell_spear_chance?: ItemPropValue;
-  hell_spear?: ItemPropValue;
-}
+// export interface ItemProps {
+//   prop_level?: number;
+//   attack?: ItemPropValue;
+//   defense?: ItemPropValue;
+//   hp?: ItemPropValue;
+//   hp_rec?: ItemPropValue;
+//   mp_rec?: ItemPropValue;
+//   lv_min?: ItemPropValue;
+//   gp?: ItemPropValue;
+//   sp_attack?: ItemPropValue;
+//   sp_def?: ItemPropValue;
+//   crit_chance?: ItemPropValue;
+//   crit_damage?: ItemPropValue;
+//   taint_resistance?: ItemPropValue;
+//   back_attack?: ItemPropValue;
+//   exp?: ItemPropValue;
+//   hell_spear_chance?: ItemPropValue;
+//   hell_spear?: ItemPropValue;
+// }
 
-export interface EquippedItems {
-  [slot: string]: EquippedItem;
-}
+// export interface EquippedItems {
+//   [slot: string]: EquippedItem;
+// }
 
 type EquipState = Record<string, EquippedItem>;
 

@@ -1,30 +1,15 @@
 import { useState } from "react";
-import { CharacterStatus, useAtkTotal } from "../../context/AtkTotalContext";
+import { useAtkTotal } from "../../context/AtkTotalContext";
 import { useEquip } from "../../context/EquipContext";
+import { CharacterStatus } from "../../types/characterStatus";
+import { StoneData } from "../../types/stones";
 import { CardModal } from "../CardModal/CardModal";
 import { EquipmentModal } from "../EquipmentModal/EquipmentModal";
 import { HoverModal } from "../HoverModal/HoverModal";
 import { PropsModal } from "../PropsModal/PropsModal";
 import { StonesModal } from "../StonesModal/StonesModal";
-
-type StoneType = "normal" | "epic";
-
-interface Effect {
-  name: keyof CharacterStatus;
-  values: number[];
-}
-
-interface StoneData {
-  statusType: string;
-  stone: StoneType;
-  value: number;
-  displayValue?: string;
-  effect?: string;
-  effectValueIndex?: number;
-  effectValue?: number;
-  automaticEffects?: Effect[];
-  type?: keyof CharacterStatus;
-}
+import { PropsData, ItemProps as SlotProps } from "./ItemsModal.types";
+// import { stoneDataToStatus } from "../../utils/stoneHelpers";
 
 function stoneDataToStatus(data: StoneData): Partial<CharacterStatus> {
   const status: Partial<CharacterStatus> = {};
@@ -54,14 +39,7 @@ function stoneDataToStatus(data: StoneData): Partial<CharacterStatus> {
   return status;
 }
 
-interface ItemProps {
-  name: string;
-}
-
-type PropValue = number | { min: number; max: number };
-type PropsData = Record<string, PropValue>;
-
-export function Items({ name }: ItemProps) {
+export function Items({ name, equipmentType }: SlotProps) {
   const { addSource, removeSource } = useAtkTotal();
   const { equipped, equipItem, unequipItem, equipProps, equipStone, unequipStone } = useEquip();
   const equippedItem = equipped[name]; // nome do slot
@@ -124,7 +102,7 @@ export function Items({ name }: ItemProps) {
       <div
         className="relative inline-block"
         onMouseEnter={() => setHovering(true)}
-      // onMouseLeave={() => setHovering(false)}
+        onMouseLeave={() => setHovering(false)}
       >
         <button
           type="button"
@@ -136,6 +114,14 @@ export function Items({ name }: ItemProps) {
             alt={equippedItem ? equippedItem.name : name}
             className="w-[110px] h-[110px] border-2 border-gray rounded-md bg-lightgray"
           />
+          {/* Badge do nível do colar/pulseira */}
+          {equippedItem?.selectedLevel !== undefined && (
+            <div className="absolute bottom-1 right-1 pointer-events-none z-10">
+              <div className="bg-blue-500 text-white text-xs font-bold px-1.5 py-[1px] rounded shadow">
+                +{equippedItem.selectedLevel}
+              </div>
+            </div>
+          )}
 
           {stoneValues[name] && (
             <div className={`absolute bottom-1 right-1 pointer-events-none z-10`}>
@@ -169,12 +155,14 @@ export function Items({ name }: ItemProps) {
               </>
             )}
 
-            <button
-              onClick={() => setPropsModal(equippedItem.props as PropsData)}
-              className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-purple-500 hover:bg-purple-400 text-xs"
-            >
-              <img src="public/assets/images/system/arrow_cropped.png" width={32} height={11} className="mx-auto" />
-            </button>
+            {equippedItem.type !== "bracelet" && equippedItem.type !== "necklace" && (
+              <button
+                onClick={() => setPropsModal(equippedItem.props as PropsData)}
+                className="flex px-1 py-[3px] border border-gray-700 rounded-md bg-purple-500 hover:bg-purple-400 text-xs"
+              >
+                <img src="public/assets/images/system/arrow_cropped.png" width={32} height={11} className="mx-auto" />
+              </button>
+            )}
 
             <button
               onClick={() => handleUnequipItem(name)}
@@ -195,6 +183,7 @@ export function Items({ name }: ItemProps) {
       {itemModal && (
         <EquipmentModal
           type={itemModal}
+          equipmentType={equipmentType}
           onSelectItem={(item) => {
             equipItem(item);
             addSource(item.name, item);

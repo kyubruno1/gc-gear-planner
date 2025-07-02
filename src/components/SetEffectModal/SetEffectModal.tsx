@@ -3,26 +3,24 @@ import { useEquip } from "../../context/EquipContext";
 import setData from "../../data/bonus-set.json";
 import { itemNames } from "../../utils/ItemNames";
 import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
+import { ActiveSet, SetDataItem } from "./SetEffectModal.types";
 
-interface SetEffectModalProps { }
-
-export function SetEffectModal(props: SetEffectModalProps) {
+export function SetEffectModal() {
   const { equipped } = useEquip();
-  const [activeSets, setActiveSets] = useState<any[]>([]);
+  const [activeSets, setActiveSets] = useState<ActiveSet[]>([]);
 
   useEffect(() => {
-    const active: any[] = [];
+    const active: ActiveSet[] = [];
 
-    for (const set of setData) {
+    for (const set of setData as SetDataItem[]) {
       const { bonusType, name, setPieces, ...bonuses } = set;
 
-      // Conta quantas peças do set estão equipadas
+      // bonuses agora contém todas as propriedades que não são as três acima
+      // Então 'bonuses' é um Record<string, any> mas pode ter tipos variados
+
       const equippedPieces = Object.values(equipped)
         .filter(item => item.bonusType === bonusType)
-        .map(item => {
-          console.log("Equipado:", item.name);
-          return item.name;
-        });
+        .map(item => item.name);
 
       const pieceCount = equippedPieces.length;
 
@@ -33,7 +31,7 @@ export function SetEffectModal(props: SetEffectModalProps) {
           equippedPieces,
           totalPieces: setPieces,
           pieceCount,
-          bonuses,
+          bonuses: bonuses as Record<string, Record<string, number>>,
         });
       }
     }
@@ -41,10 +39,10 @@ export function SetEffectModal(props: SetEffectModalProps) {
     setActiveSets(active);
   }, [equipped]);
 
+
+
   return (
     <div className="absolute top-5 left-[31.5rem] ml-2 flex flex-col gap-[1px] p-1 rounded-md z-10 bg-[#2D3649] h-auto w-[32rem] bg-opacity-70 text-white font-bold text-sm">
-
-
       {activeSets.length === 0 && (
         <p className="p-4 text-gray-400">Nenhum conjunto ativo.</p>
       )}

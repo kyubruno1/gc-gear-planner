@@ -1,25 +1,9 @@
-import { ReactNode, useEffect } from "react";
-
-interface BaseModalProps {
-  onClose: () => void;
-  children: ReactNode;
-  maxWidth?: string;
-  maxHeight?: string;
-  title?: string,
-  titleColor?: string
-}
+import { useEscapeKey } from "../../hooks/UseEscapeKey";
+import { BaseModalProps } from "../../types/ui";
 
 export function BaseModal({ onClose, children, maxWidth = "750px", maxHeight = "750px", title = "", titleColor = 'white' }: BaseModalProps) {
   // Fecha com ESC
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onClose]);
+  useEscapeKey(onClose);
 
   return (
     <div

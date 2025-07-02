@@ -1,0 +1,43 @@
+[
+  {
+    "name": "gp_bracelet",
+    "type": "bracelet",
+    "bonusType": "bracelet",
+    "equipType": "accessories_set",
+    "grade": "common",
+    "equipLvl": 0,
+    "img": "/assets/images/equip/bracelet/magica.png",
+    "total_attack": 0,
+    "attack": 20,
+    "crit_chance": 0,
+    "crit_damage": 0,
+    "sp_attack": 0,
+    "mp_rec": 0,
+    "hell_spear_chance": 0,
+    "hell_spear": 0,
+    "taint_resistance": 0,
+    "defense": 0,
+    "hp": 0,
+    "crit_resistance": 0,
+    "sp_def": 0,
+    "hp_rec": 0,
+    "counter_attack_resistance": 0,
+    "exp": 0,
+    "gp": 0,
+    "props": {
+    },
+    "statusNeck": {
+      "type": "attack",
+      "0": 60,
+      "1": 80, 
+      "2": 100, 
+      "3": 120, 
+      "4": 150, 
+      "5": 180, 
+      "6": 220, 
+      "7": 265, 
+      "8": 320, 
+      "9": 391
+    }
+  }
+]

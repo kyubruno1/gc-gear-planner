@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowClockwise, Bug, CaretCircleDoubleUp, Coins, Drop, Heart, Heartbeat, Shield, ShieldCheck, Star, Sword } from "phosphor-react";
 import { useState } from "react";
-import { ItemProps, ItemPropValue } from "../../context/EquipContext";
-import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
+import { ItemProps, ItemPropValue } from "../../types/ItemProps";
+import { effectIcons } from "../../utils/effectIcons";
+import { formatValue } from "../../utils/formatValue";
+import { statusLabels } from "../../utils/StatusLabel";
 import { BaseModal } from "../BaseModal/BaseModal";
 
 interface PropsModalProps {
@@ -19,32 +20,17 @@ const maxSelectionByRarity = {
   ancient: 5,
 };
 
-const effectIcons: Record<string, JSX.Element> = {
-  defense: <Shield size={16} className="text-blue-400" />,
-  attack: <Sword size={16} className="text-green-400" />,
-  hp: <Heart size={16} className="text-red-400" />,
-  hp_rec: <Heartbeat size={16} className="text-red-400" />,
-  mp_rec: <Drop size={16} className="text-blue-500" />,
-  sp_attack: <Sword size={16} className="text-green-400" />,
-  sp_def: <ShieldCheck size={16} className="text-gray-500" />,
-  gp: <Coins size={16} className="text-yellow-500" />,
-  taint_resistance: <Bug size={16} className="text-green-950" />,
-  crit_chance: <Star size={16} className="text-yellow-300" />,
-  crit_damage: <Star size={16} className="text-gold" />,
-  back_attack: <ArrowClockwise size={16} />,
-  exp: <CaretCircleDoubleUp size={16} />,
-  hell_spear: <Sword size={16} className="text-purple-500" />,
-  hell_spear_chance: <Sword size={16} className="text-purple-500" />,
-};
-
-export function PropsModal({
-  onClose,
-  propsData,
-  rarity,
-  initialSelectedProps = {},
-}: PropsModalProps) {
+export function PropsModal({ onClose, propsData, rarity, initialSelectedProps = {}, }: PropsModalProps) {
   const maxSelectable = maxSelectionByRarity[rarity] ?? 2;
-  const [selectedProps, setSelectedProps] = useState<Record<string, number>>(initialSelectedProps);
+  const normalizedInitialSelectedProps: Record<string, number> = {};
+
+  //Normalizar ao carregar para sempre ser Record<string, number>
+  for (const [key, val] of Object.entries(initialSelectedProps)) {
+    if (typeof val === "number") normalizedInitialSelectedProps[key] = val;
+    else if (val && "min" in val) normalizedInitialSelectedProps[key] = rarity === "ancient" ? val.min : val.max;
+  }
+  const [selectedProps, setSelectedProps] = useState<Record<string, number>>(normalizedInitialSelectedProps);
+
   const [error, setError] = useState<string | null>(null);
 
   function toggleSelect(key: string, value: ItemPropValue) {
@@ -75,21 +61,6 @@ export function PropsModal({
       const clamped = Math.max(min, Math.min(max, parsed));
       setSelectedProps((prev) => ({ ...prev, [key]: clamped }));
     }
-  }
-
-  function formatValue(value: ItemPropValue, key: string): string {
-    if (value === undefined || value === null) return "-";
-    if (typeof value === "number") return formatStatValue(key, value);
-    if ("min" in value && "max" in value) {
-      if (rarity === "ancient") {
-        // mostra faixa min ~ max, formatando cada lado
-        return `${formatStatValue(key, value.min)} ~ ${formatStatValue(key, value.max)}`;
-      } else {
-        // só mostra o max, formatado
-        return formatStatValue(key, value.max);
-      }
-    }
-    return "-";
   }
 
   return (
@@ -126,7 +97,7 @@ export function PropsModal({
                     {effectIcons[key] ?? null}
                     {statusLabels[key] ?? key}:
                   </span>
-                  <span>{formatValue(value, key)}</span>
+                  <span>{formatValue(value, key, rarity)}</span>
                 </div>
 
                 {isSelected &&

@@ -1,31 +1,6 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { CharacterStatus, emptyCharacterStatus } from "../types/characterStatus";
 import { useEquip } from "./EquipContext";
-
-export interface CharacterStatus {
-  total_attack: number;
-  attack: number;
-  crit_chance: number;
-  crit_damage: number;
-  sp_attack: number;
-  mp_rec: number;
-  hell_spear_chance: number;
-  hell_spear: number;
-  taint_resistance: number;
-  defense: number;
-  hp: number;
-  crit_resistance: number;
-  sp_def: number;
-  hp_rec: number;
-  counter_attack_resistance: number;
-  exp: number;
-  gp: number;
-}
 
 interface AtkTotalContextType {
   atkTotal: number;
@@ -42,20 +17,20 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
 
   const statusBase: CharacterStatus = {
     total_attack: 0,
-    attack: 1000,
-    crit_chance: 10,
-    crit_damage: 50,
-    sp_attack: 500,
-    mp_rec: 30,
-    hell_spear_chance: 5,
-    hell_spear: 80,
-    taint_resistance: 10,
-    defense: 800,
-    hp: 5000,
-    crit_resistance: 10,
-    sp_def: 400,
-    hp_rec: 10,
-    counter_attack_resistance: 5,
+    attack: 300,
+    crit_chance: 0,
+    crit_damage: 0,
+    sp_attack: 0,
+    mp_rec: 0,
+    hell_spear_chance: 10.0,
+    hell_spear: 0,
+    taint_resistance: 0,
+    defense: 260,
+    hp: 190,
+    crit_resistance: 0,
+    sp_def: 0,
+    hp_rec: 0,
+    counter_attack_resistance: 0,
     exp: 0,
     gp: 0,
   };
@@ -67,56 +42,17 @@ export function AtkTotalProvider({ children }: { children: ReactNode }) {
   const [atkTotal, setAtkTotal] = useState<number>(calculateAtkTotal(statusBase));
 
   function normalizeCharacterStatus(partial: Partial<CharacterStatus>): CharacterStatus {
-    const empty: CharacterStatus = {
-      total_attack: 0,
-      attack: 0,
-      crit_chance: 0,
-      crit_damage: 0,
-      sp_attack: 0,
-      mp_rec: 0,
-      hell_spear_chance: 0,
-      hell_spear: 0,
-      taint_resistance: 0,
-      defense: 0,
-      hp: 0,
-      crit_resistance: 0,
-      sp_def: 0,
-      hp_rec: 0,
-      counter_attack_resistance: 0,
-      exp: 0,
-      gp: 0,
-    };
-    return { ...empty, ...partial };
+    return { ...emptyCharacterStatus, ...partial };
   }
 
   function sumSources(sources: Record<string, Partial<CharacterStatus>>): CharacterStatus {
-    const empty: CharacterStatus = {
-      total_attack: 0,
-      attack: 0,
-      crit_chance: 0,
-      crit_damage: 0,
-      sp_attack: 0,
-      mp_rec: 0,
-      hell_spear_chance: 0,
-      hell_spear: 0,
-      taint_resistance: 0,
-      defense: 0,
-      hp: 0,
-      crit_resistance: 0,
-      sp_def: 0,
-      hp_rec: 0,
-      counter_attack_resistance: 0,
-      exp: 0,
-      gp: 0,
-    };
-
-    return Object.values(sources).reduce((acc, cur) => {
+    return Object.values(sources).reduce<CharacterStatus>((acc, cur) => {
       const norm = normalizeCharacterStatus(cur);
       for (const key in acc) {
         acc[key as keyof CharacterStatus] += norm[key as keyof CharacterStatus];
       }
       return acc;
-    }, empty);
+    }, { ...emptyCharacterStatus });
   }
 
   function calculateAtkTotal(character: CharacterStatus): number {

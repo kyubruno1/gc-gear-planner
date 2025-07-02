@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import { Card } from "../../context/EquipContext";
+import { Card } from "../../types/cards";
 import { formatStatValue, statusLabels } from "../../utils/StatusLabel";
 import { BaseModal } from "../BaseModal/BaseModal";
-
-interface CardSelectModalProps {
-  slot: string;
-  onSelectCard: (cardName: string) => void;
-  onClose: () => void;
-}
+import { CardSelectModalProps } from "./CardSelectModal.types";
 
 export function CardSelectModal({ slot, onSelectCard, onClose }: CardSelectModalProps) {
   const [cards, setCards] = useState<Card[]>([]);

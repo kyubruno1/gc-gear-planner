@@ -1,4 +1,4 @@
-import characterImage from '../../../public/assets/images/characters/elesis_1.png';
+import characterImage from '../../../public/assets/images/characters/arts/elesis_1.png';
 // import characterImage from '../../../public/assets/images/characters/elesis_4.png';
 import changeCharacter from '../../../public/assets/images/system/change_character.png';
 import { Header } from '../../components/Header/Header';
@@ -23,7 +23,7 @@ export function Equip() {
         <div className='grid grid-cols-[8.125rem_2fr_16.25rem] grid-rows-[auto_1fr_auto]'>
           <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-start">
             {equipmentLeft.map((slot) => {
-              return <Items name={slot} key={slot} />
+              return <Items name={slot} key={slot} equipmentType="equip" />
             })}
           </div>
 
@@ -36,7 +36,7 @@ export function Equip() {
 
           <div className="grid grid-flow-col grid-rows-6 gap-2.5 justify-end">
             {equipmentRight.map((slot) => {
-              return <Items name={slot} key={slot} />
+              return <Items name={slot} key={slot} equipmentType="equip" />
             })}
           </div>
 

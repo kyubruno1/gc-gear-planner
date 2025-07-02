@@ -11,7 +11,27 @@ export const slotNames: Record<string, string> = {
   'lower-head': "Máscara",
   'upper-head': "Diadema",
   'weapon': "Arma",
+  'necklace': "Colar",
+  "bracelet": "Tornozeleira",
+  'ring1': "Anel",
+  'earring1': "Brinco",
+  'earring2': "Piercing"
 } 
+
+export const itemGrades: Record<string, string> = {
+  rare: "raro",
+  epic: "épico",
+  legendary: "lendário",
+  ancient: "ancestral"
+}
+
+export const gradeColors: Record<string, string> = {
+  common: 'text-white',
+  rare: 'text-equipRare',
+  epic: 'text-equipEpic',
+  legendary: 'text-purple-500',
+  ancient: 'text-equipAncient'
+};
 
 export const itemNames: Record<string, string> = {
   berkas_epic_helmet: "Elmo do Dragão de Ferro",
@@ -62,19 +82,6 @@ export const itemNames: Record<string, string> = {
   dimensional_guardian_epic_upper_back: "Asas dos Guardiões Dimensionais", 
   dimensional_guardian_epic_lower_back: "Facas dos Guardiões Dimensionais", 
   dimensional_guardian_epic_arms: "Escudos dos Guardiões Dimensionais", 
-};
-
-export const itemGrades: Record<string, string> = {
-  rare: "raro",
-  epic: "épico",
-  legendary: "lendário",
-  ancient: "ancestral"
-}
-
-export const gradeColors: Record<string, string> = {
-  common: 'text-equipCommon',
-  rare: 'text-equipRare',
-  epic: 'text-equipEpic',
-  legendary: 'text-purple-500',
-  ancient: 'text-equipAncient'
+  gp_necklace: "Colar do Vento",
+  gp_bracelet: "Tornozeleira Mágica"
 };
