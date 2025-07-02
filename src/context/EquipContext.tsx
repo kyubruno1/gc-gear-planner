@@ -6,60 +6,11 @@ import { CharacterStatus } from "../types/characterStatus";
 import { EquippedItem } from "../types/equip";
 import { ItemProps } from "../types/ItemProps";
 
-// export interface EquippedItem extends CharacterStatus {
-//   stone?: StoneData;
-//   name: string;
-//   type: string;
-//   img: string;
-//   bonusType: string;
-//   equipType?: string;
-//   grade: string;
-//   equipLvl: number;
-//   props: ItemProps;
-//   selectedProps?: Partial<ItemProps>;
-//   cards?: Card[];
-// }
-
-// export interface Card {
-//   type: string[];
-//   name: string;
-//   img: string;
-//   effects: {
-//     name: string,
-//     value: number,
-//   }[];
-// }
-
-// export type ItemPropValue = number | { min: number; max: number };
-
-// export interface ItemProps {
-//   prop_level?: number;
-//   attack?: ItemPropValue;
-//   defense?: ItemPropValue;
-//   hp?: ItemPropValue;
-//   hp_rec?: ItemPropValue;
-//   mp_rec?: ItemPropValue;
-//   lv_min?: ItemPropValue;
-//   gp?: ItemPropValue;
-//   sp_attack?: ItemPropValue;
-//   sp_def?: ItemPropValue;
-//   crit_chance?: ItemPropValue;
-//   crit_damage?: ItemPropValue;
-//   taint_resistance?: ItemPropValue;
-//   back_attack?: ItemPropValue;
-//   exp?: ItemPropValue;
-//   hell_spear_chance?: ItemPropValue;
-//   hell_spear?: ItemPropValue;
-// }
-
-// export interface EquippedItems {
-//   [slot: string]: EquippedItem;
-// }
-
 type EquipState = Record<string, EquippedItem>;
 
 interface EquipContextType {
   equipped: EquipState;
+  setFullEquip: (newEquip: EquipState) => void;  // Substituir equipamento completo
   equipItem: (item: EquippedItem) => void;
   unequipItem: (type: string) => void;
   clearEquipments: () => void;
@@ -78,8 +29,37 @@ interface EquipContextType {
 
 const EquipContext = createContext<EquipContextType | undefined>(undefined);
 
+// const LOCAL_STORAGE_KEY = "mygame_equipped";
+
 export function EquipProvider({ children }: { children: ReactNode }) {
   const [equipped, setEquipped] = useState<EquipState>({});
+
+  // Carregar do localStorage ao montar
+  // useEffect(() => {
+  //   const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+  //   if (saved) {
+  //     try {
+  //       const parsed: EquipState = JSON.parse(saved);
+  //       setEquipped(parsed);
+  //     } catch (error) {
+  //       console.error("Erro ao carregar equipamentos do localStorage", error);
+  //     }
+  //   }
+  // }, []);
+
+  // Salvar no localStorage sempre que 'equipped' mudar
+  // useEffect(() => {
+  //   try {
+  //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(equipped));
+  //   } catch (error) {
+  //     console.error("Erro ao salvar equipamentos no localStorage", error);
+  //   }
+  // }, [equipped]);
+
+  // Função para substituir o equipamento completo (ex: ao carregar personagem salvo)
+  function setFullEquip(newEquip: EquipState) {
+    setEquipped(newEquip);
+  }
 
   function equipItem(item: EquippedItem) {
     setEquipped((prev) => ({
@@ -272,6 +252,7 @@ export function EquipProvider({ children }: { children: ReactNode }) {
   return (
     <EquipContext.Provider value={{
       equipped,
+      setFullEquip,
       equipItem,
       unequipItem,
       clearEquipments,
