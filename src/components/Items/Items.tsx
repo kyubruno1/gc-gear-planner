@@ -94,8 +94,16 @@ export function Items({ name, equipmentType }: SlotProps) {
     removeSource(`equip:${slotName}`);
   }
 
-  const imagePath = (fileName: string) =>
-    new URL(`../../../public/assets/images/equip-clean/${fileName}`, import.meta.url).href;
+  // const imagePath = (fileName: string) =>
+  //   new URL(`../../../public/assets/images/equip-clean/${fileName}`, import.meta.url).href;
+
+  const imagePath = (fileName: string) => {
+    const cleanedName = fileName.startsWith("visual-")
+      ? fileName.replace("visual-", "")
+      : fileName;
+
+    return new URL(`../../../public/assets/images/equip-clean/${cleanedName}`, import.meta.url).href;
+  };
 
   return (
     <>

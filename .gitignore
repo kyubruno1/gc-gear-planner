@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 
-DATA-FILLED.md
 character-status.md
 character-status-level.json
+roadmap.md

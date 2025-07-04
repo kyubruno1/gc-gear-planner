@@ -48,7 +48,24 @@ export function EquipmentModal({ type, equipmentType, onSelectItem, onClose }: E
               <div
                 key={item.name}
                 className="flex flex-col items-center justify-center rounded-md cursor-pointer shadow-bgdarkblue border-bgdarkblue text-shadow-title font-bold p-4 bg-gradient-to-b from-bluecustom to-bgtextdark"
-                onClick={() => onSelectItem(itemWithLevel)}
+                onClick={() => {
+                  const selectedItem = { ...itemWithLevel };
+
+                  if (equipmentType !== "equip" && itemWithLevel.props) {
+                    selectedItem.selectedProps = {};
+
+                    Object.entries(itemWithLevel.props).forEach(([key, value]) => {
+                      const min = value.min ?? 0;
+                      const max = value.max ?? 0;
+
+                      if (min > 0 && min === max) {
+                        selectedItem.selectedProps![key] = min; // valor único
+                      }
+                    });
+                  }
+
+                  onSelectItem(selectedItem);
+                }}
               >
                 <div className=" w-full p-1 rounded-md shadow-bgdarkblue">
                   <h4 className={`pb-2.5 text-center ${gradeColors[item.grade] || "text-white"}`}>
@@ -82,39 +99,55 @@ export function EquipmentModal({ type, equipmentType, onSelectItem, onClose }: E
                   </div>
                 )}
 
-                <p className="text-lg text-primary mt-2 space-y-1">
-                  Status base
-                </p>
-                <div className="text-sm text-white mt-2 space-y-1">
-                  {Object.entries(itemWithLevel)
-                    .filter(([key, value]) =>
-                      typeof value === "number" &&
-                      value > 0 &&
-                      [
-                        "attack",
-                        "crit_chance",
-                        "crit_damage",
-                        "sp_attack",
-                        "mp_rec",
-                        "hell_spear_chance",
-                        "hell_spear",
-                        "taint_resistance",
-                        "defense",
-                        "hp",
-                        "crit_resistance",
-                        "sp_def",
-                        "hp_rec",
-                        "counter_attack_resistance",
-                        "exp",
-                        "gp"
-                      ].includes(key)
-                    )
-                    .map(([key, value]) => (
-                      <p key={key}>
-                        {statusLabels[key]}: {formatStatValue(key, value)}
-                      </p>
-                    ))}
-                </div>
+                {equipmentType === "equip" ? (
+                  <>
+                    <p className="text-lg text-primary mt-2 space-y-1">Status base</p>
+                    <div className="text-sm text-white mt-2 space-y-1">
+                      {Object.entries(itemWithLevel)
+                        .filter(([key, value]) =>
+                          typeof value === "number" &&
+                          value > 0 &&
+                          [
+                            "attack",
+                            "crit_chance",
+                            "crit_damage",
+                            "sp_attack",
+                            "mp_rec",
+                            "hell_spear_chance",
+                            "hell_spear",
+                            "taint_resistance",
+                            "defense",
+                            "hp",
+                            "crit_resistance",
+                            "sp_def",
+                            "hp_rec",
+                            "counter_attack_resistance",
+                            "exp",
+                            "gp"
+                          ].includes(key)
+                        )
+                        .map(([key, value]) => (
+                          <p key={key}>
+                            {statusLabels[key]}: {formatStatValue(key, value)}
+                          </p>
+                        ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-lg text-primary mt-2 space-y-1">Propriedades disponíveis</p>
+                    <div className="text-sm text-white mt-2 space-y-1">
+                      {item.props &&
+                        Object.entries(item.props)
+                          .filter(([_, val]) => val.min > 0 || val.max > 0)
+                          .map(([key, val]) => (
+                            <p key={key}>
+                              {statusLabels[key]}: {val.min === val.max ? val.min : `${val.min} ~ ${val.max}`}
+                            </p>
+                          ))}
+                    </div>
+                  </>
+                )}
               </div>
             );
           })}

@@ -73,7 +73,8 @@ export function Equip() {
       });
     }
   }
-
+  console.log(characterImagePath)
+  console.log(`${characterName} - ${jobKey}`)
   return (
     <>
       <Header />
@@ -122,14 +123,14 @@ export function Equip() {
               onClick={handleSaveCharacter}
               className="w-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded z-50"
             >
-              Salvar Personagem
+              Salvar Build
             </button>
 
             <button
               onClick={() => setIsSavedModalOpen(true)}
               className="w-1/2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded z-50"
             >
-              Abrir Personagens Salvos
+              Abrir Builds Salvas
             </button>
           </div>
 
